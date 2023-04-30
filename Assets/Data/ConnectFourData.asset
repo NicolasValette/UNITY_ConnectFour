@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd96368109cadd44b74fd70f89efe56, type: 3}
+  m_Name: ConnectFourData
+  m_EditorClassIdentifier: 
+  _columns: 7
+  _rows: 6
+  _yPosLowestRow: 0.2
+  _yPosHighestRow: 0.9
+  _player1PawnPrefab: {fileID: 8884411155047406970, guid: 65ca46625f8b05e448c845b8677506a4,
+    type: 3}
+  _player2PawnPrefab: {fileID: 8937874891452882026, guid: accd76522d4e98b4598eb3e34f41cc6b,
+    type: 3}
+  _rowsPos:
+  - 0.2
+  - 0.345
+  - 0.485
+  - 0.62
+  - 0.76
+  - 0.985
+  _columnsPos:
+  - -0.5
+  - -0.33
+  - -0.165
+  - 0
+  - 0.165
+  - 0.33
+  - 0.5
