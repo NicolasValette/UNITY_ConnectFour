@@ -82,7 +82,7 @@ public class Grid : MonoBehaviour
         return -1;
     }
 
-    private bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
+    public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
     {
         int line = 1; //Number of pan in line.
 

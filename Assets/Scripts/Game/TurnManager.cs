@@ -14,6 +14,20 @@ namespace ConnectFour.Game
         private bool _isWin = false;
         public bool IsWin { get => _isWin; }
         public bool IsPlayer1Turn { get => _isPlayer1Turn; }
+        public PawnOwner ActivePlayer                                       // Return the player who is playing
+        {
+            get
+            {
+                return _isPlayer1Turn?PawnOwner.Player1:PawnOwner.Player2;
+            }
+        }
+        public PawnOwner PassivePlayer                                      // Return the player who is waiting
+        {
+            get
+            {
+                return _isPlayer1Turn ? PawnOwner.Player2 : PawnOwner.Player1;
+            }
+        }
         // Start is called before the first frame update
         void Start()
         {
