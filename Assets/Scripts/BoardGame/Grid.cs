@@ -14,7 +14,7 @@ public class Grid : MonoBehaviour
     [SerializeField]
     private TurnManager _turnManager;
 
-    private int _numberOfColumFull = 0;             // Track the number of column full, if this reach the number of max column, the game is a draw
+   
     #region EVENTS
     public static event Action SwitchTurn;          // Raised each turn to switch
     public static event Action<PawnOwner> GameEnd;  // Raised when a player win the game
@@ -66,7 +66,6 @@ public class Grid : MonoBehaviour
                 _grid[i,j] = PawnOwner.None;
             }
         }
-        _numberOfColumFull = 0;
     }
     // Put a pawn in a collumns, return the rows where the pawn fall, -1 if the columns is full
     public int AddPawn (int columns, PawnOwner player)
@@ -200,11 +199,6 @@ public class Grid : MonoBehaviour
 
     public bool IsColumnAvailable(int column)
     {
-        bool result = _grid[_gridData.Rows - 1, column] == PawnOwner.None;
-        if (!result)                                // if this is false, the column is full
-        {
-            _numberOfColumFull++;
-        }
         return _grid[_gridData.Rows -1, column] == PawnOwner.None;
     }
     public void PutPawn(int column)
@@ -227,6 +221,14 @@ public class Grid : MonoBehaviour
                 SwitchTurn?.Invoke();
             }
         }
+        int _numberOfColumFull = 0;
+        for (int j=0; j< _gridData.Columns; j++) 
+        {
+            if (_grid[_gridData.Rows - 1, j] != PawnOwner.None)
+            {
+                _numberOfColumFull++;                           // We track the number of pawn in the highest row
+            }                                                   // if the highest line is full, the grid is full and the game is a draw
+        }   
         if (_numberOfColumFull >= _gridData.Columns)
         {
             GameEnd?.Invoke(PawnOwner.None);

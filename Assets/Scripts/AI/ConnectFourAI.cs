@@ -41,7 +41,7 @@ namespace ConnectFour.AI
         {
             List<int> availableCell = new List<int>();
             int opponentWinningCol = -1;
-            for (int col=0;col<_grid.Data.Columns ;col++) 
+            for (int col = 0; col < _grid.Data.Columns; col++)
             {
                 if (_grid.IsColumnAvailable(col))
                 {
@@ -62,7 +62,7 @@ namespace ConnectFour.AI
                 }
             }
             // If we can't win, we try to deny other player victory, otherwise, we play a random column 
-            return (opponentWinningCol!=-1)? opponentWinningCol : Random.Range(0, availableCell.Count);                               
+            return (opponentWinningCol != -1) ? opponentWinningCol : availableCell[Random.Range(0, availableCell.Count)];                               
         }
     }
 }
