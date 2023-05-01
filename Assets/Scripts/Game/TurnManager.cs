@@ -22,12 +22,12 @@ namespace ConnectFour.Game
         private void OnEnable()
         {
             Grid.SwitchTurn += SwitchTurn;
-            Grid.GameWin += GameWin;
+            Grid.GameEnd += GameWin;
         }
         private void OnDisable()
         {
             Grid.SwitchTurn -= SwitchTurn;
-            Grid.GameWin -= GameWin;
+            Grid.GameEnd -= GameWin;
         }
         // Update is called once per frame
         void Update()
@@ -41,6 +41,7 @@ namespace ConnectFour.Game
         }
         public void GameWin(PawnOwner player)
         {
+            _isWin = true;
             _pawnButtons.SetActive(false);
         }
     }

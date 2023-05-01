@@ -1,3 +1,4 @@
+using ConnectFour.BoardGame;
 using ConnectFour.Game;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +23,15 @@ namespace ConnectFour.AI
         {
             if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
             {
-                _grid.PutPawn(Random.Range(0, _grid.Data.Columns));
+                List<int> availableCell = new List<int>();
+                for (int i = 0; i < _grid.Data.Columns; i++)
+                {
+                    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
+                    {
+                        availableCell.Add(i);
+                    }
+                }
+                _grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
             }
         }
     }

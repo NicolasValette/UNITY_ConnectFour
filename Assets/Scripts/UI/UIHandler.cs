@@ -18,15 +18,22 @@ namespace ConnectFour.UI
         }
         private void OnEnable()
         {
-            Grid.GameWin += DisplayWinner;
+            Grid.GameEnd += DisplayWinner;
         }
         private void OnDisable()
         {
-            Grid.GameWin -= DisplayWinner;
+            Grid.GameEnd -= DisplayWinner;
         }
         public void DisplayWinner (PawnOwner player)
         {
-            _winText.text = player.ToString() + " WINS !!";
+            if (player == PawnOwner.None)
+            {
+                _winText.text = "DRAW !";
+            }
+            else
+            {
+                _winText.text = player.ToString() + " WINS !!";
+            }
             _winText.enabled = true;
         }
     }

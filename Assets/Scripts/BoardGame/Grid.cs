@@ -13,15 +13,20 @@ public class Grid : MonoBehaviour
     private GridData _gridData;
     [SerializeField]
     private TurnManager _turnManager;
-    #region EVENTS
-    public static event Action SwitchTurn;
-    public static event Action<PawnOwner> GameWin;
-    #endregion
-    #region
-    public GridData Data { get => _gridData; }
-    #endregion
-    private PawnOwner[,] _grid;
 
+    private int _numberOfColumFull = 0;             // Track the number of column full, if this reach the number of max column, the game is a draw
+    #region EVENTS
+    public static event Action SwitchTurn;          // Raised each turn to switch
+    public static event Action<PawnOwner> GameEnd;  // Raised when a player win the game
+    public static event Action GameDraw;            // Raised when the grid is full without winner
+        
+    private PawnOwner[,] _grid;
+    
+    #endregion
+    #region Getters
+    public GridData Data { get => _gridData; }
+    public PawnOwner[,] PlayingGrid { get => _grid; }
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +66,7 @@ public class Grid : MonoBehaviour
                 _grid[i,j] = PawnOwner.None;
             }
         }
+        _numberOfColumFull = 0;
     }
     // Put a pawn in a collumns, return the rows where the pawn fall, -1 if the columns is full
     public int AddPawn (int columns, PawnOwner player)
@@ -127,7 +133,7 @@ public class Grid : MonoBehaviour
         // Check South East Side
         for (int i = 1; (lastPawnColumn + i < _gridData.Columns && lastPawnRow - i >=0); i++)
         {
-            if (_grid[lastPawnRow + i, lastPawnColumn + i] == player)    // Check if the neihgour box contain player pawn
+            if (_grid[lastPawnRow - i, lastPawnColumn + i] == player)    // Check if the neihgour box contain player pawn
             {
                 line++;
             }
@@ -192,22 +198,38 @@ public class Grid : MonoBehaviour
         return false;
     }
 
+    public bool IsColumnAvailable(int column)
+    {
+        bool result = _grid[_gridData.Rows - 1, column] == PawnOwner.None;
+        if (!result)                                // if this is false, the column is full
+        {
+            _numberOfColumFull++;
+        }
+        return _grid[_gridData.Rows -1, column] == PawnOwner.None;
+    }
     public void PutPawn(int column)
     {
-        int row = AddPawn(column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
-      //  Debug.Log("row = " + row);
-        Vector2 pos = GetPositionFromGrid(row, column);
-        GameObject Pawn = Instantiate(_turnManager.IsPlayer1Turn?_gridData.Player1PawnPrefab:_gridData.Player2PawnPrefab, 
-            new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
-        Pawn.transform.SetParent(transform, true);
+        if (IsColumnAvailable(column))
+        {
+            int row = AddPawn(column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+            //  Debug.Log("row = " + row);
+            Vector2 pos = GetPositionFromGrid(row, column);
+            GameObject Pawn = Instantiate(_turnManager.IsPlayer1Turn ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
+                new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+            Pawn.transform.SetParent(transform, true);
 
-        if (IsGameWin(row, column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2))
-        {
-            GameWin?.Invoke (_turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+            if (IsGameWin(row, column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2))
+            {
+                GameEnd?.Invoke(_turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+            }
+            else
+            {
+                SwitchTurn?.Invoke();
+            }
         }
-        else
+        if (_numberOfColumFull >= _gridData.Columns)
         {
-            SwitchTurn?.Invoke();
+            GameEnd?.Invoke(PawnOwner.None);
         }
     }
 }

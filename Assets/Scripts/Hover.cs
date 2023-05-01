@@ -1,3 +1,5 @@
+using ConnectFour.BoardGame;
+using ConnectFour.Game;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ namespace ConnectFour
         #endregion
 
         private bool _isMouseOver;
+        private bool _isGameWin = false;
 
         // Components we need later
         private Renderer _renderer;
@@ -21,16 +24,24 @@ namespace ConnectFour
         void Start()
         {
             _renderer = GetComponent<Renderer>();
+            _isGameWin = false;
         }
-
-        // Update is called once per frame
-        void Update()
+        private void OnEnable()
         {
-
+            Grid.GameEnd += GameIsOver;
+        }
+        private void OnDisable()
+        {
+            Grid.GameEnd-= GameIsOver;
+        }
+        public void GameIsOver(PawnOwner winner)
+        {
+            _isGameWin= true;
+            gameObject.SetActive(false);
         }
         private void OnMouseExit()
         {
-            if (_isMouseOver)
+            if (!_isGameWin && _isMouseOver)
             {
                 _isMouseOver = false;
                 if (_renderer != null)
@@ -41,7 +52,7 @@ namespace ConnectFour
         }
         private void OnMouseOver()
         {
-            if (!_isMouseOver)
+            if (!_isGameWin && !_isMouseOver)
             {
                 _isMouseOver = true;
                 if (_renderer != null)
