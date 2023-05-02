@@ -19,6 +19,7 @@ public class Grid : MonoBehaviour
     public static event Action SwitchTurn;          // Raised each turn to switch
     public static event Action<PawnOwner> GameEnd;  // Raised when a player win the game
     public static event Action GameDraw;            // Raised when the grid is full without winner
+    
         
     private PawnOwner[,] _grid;
     
@@ -205,16 +206,17 @@ public class Grid : MonoBehaviour
     {
         if (IsColumnAvailable(column))
         {
-            int row = AddPawn(column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+            int row = AddPawn(column,_turnManager.ActivePlayer);
             //  Debug.Log("row = " + row);
             Vector2 pos = GetPositionFromGrid(row, column);
-            GameObject Pawn = Instantiate(_turnManager.IsPlayer1Turn ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
-                new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+            GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.Player1 ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
+                new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
             Pawn.transform.SetParent(transform, true);
+            Pawn.GetComponent<Pawn>()?.Fall(pos.y);
 
-            if (IsGameWin(row, column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2))
+            if (IsGameWin(row, column, _turnManager.ActivePlayer))
             {
-                GameEnd?.Invoke(_turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+                GameEnd?.Invoke(_turnManager.ActivePlayer);
             }
             else
             {

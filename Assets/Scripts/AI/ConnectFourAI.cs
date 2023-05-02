@@ -15,13 +15,13 @@ namespace ConnectFour.AI
         // Start is called before the first frame update
         void Start()
         {
-
+            gameObject.SetActive(false);                                            // Disable IA before the game start
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
+            if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
             {
                 //List<int> availableCell = new List<int>();
                 //for (int i = 0; i < _grid.Data.Columns; i++)
@@ -38,7 +38,7 @@ namespace ConnectFour.AI
         }
         public void PlayAITurn()
         {
-            if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
+            if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
             {
                 //List<int> availableCell = new List<int>();
                 //for (int i = 0; i < _grid.Data.Columns; i++)

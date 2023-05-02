@@ -1,4 +1,5 @@
 using ConnectFour.BoardGame;
+using ConnectFour.Game;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,8 @@ namespace ConnectFour.UI
 
         [SerializeField]
         private TMP_Text _winText;
+        [SerializeField]
+        private GameObject _chooseButtons;
         // Start is called before the first frame update
         void Start()
         {
@@ -19,10 +22,12 @@ namespace ConnectFour.UI
         private void OnEnable()
         {
             Grid.GameEnd += DisplayWinner;
+            TurnManager.OnColorChoose += ToggleChooseButton;
         }
         private void OnDisable()
         {
             Grid.GameEnd -= DisplayWinner;
+            TurnManager.OnColorChoose -= ToggleChooseButton;
         }
         public void DisplayWinner (PawnOwner player)
         {
@@ -37,6 +42,10 @@ namespace ConnectFour.UI
             _winText.enabled = true;
         }
 
+        public void ToggleChooseButton(PawnOwner playerChoice)
+        {
+            _chooseButtons.SetActive(!_chooseButtons.activeSelf);
+        }
         public void QuitGame()
         {
 #if UNITY_EDITOR

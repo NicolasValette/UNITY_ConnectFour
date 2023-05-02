@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6938701977340738735}
   - component: {fileID: 8613887514886409955}
   - component: {fileID: 8613887514886409951}
+  - component: {fileID: -4290853453946637562}
   m_Layer: 0
   m_Name: Pawn1
   m_TagString: Untagged
@@ -119,3 +120,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &-4290853453946637562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884411155047406970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 595aa3bb0d7b9c041a09dcc2f7647bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

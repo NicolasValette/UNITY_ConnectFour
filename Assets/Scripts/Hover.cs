@@ -66,5 +66,10 @@ namespace ConnectFour
         {
             OnHover?.Invoke(_column);
         }
+
+        public void InitColumn (int column)
+        {  
+            _column = column; 
+        }
     }
 }
