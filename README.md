@@ -1,6 +1,6 @@
 # UNITY_ConnectFour
 
-## Déscription du projet
+## Description du projet
 
 Ce projet est réalisé dans le cadre du test technique demandé par le studio Exkee.
 
@@ -24,17 +24,17 @@ Bonus :
 ## Technologies
 
 Le projet est réalisé avec Unity version 2021.3.19f1 en C#, en utilisant l'URP.
-Le projet utiliser les package suivnt :
+Le projet utilise les packages suivnts :
 - New Input System.
 - Les vidéo de gameplay sont capturé avec le Unity Recorder.
 
 ## Video WIP.
-Voici quelque vidéo capturée au cours du développement pour en voir l'avancée.
+Voici quelques vidéos capturées au cours du développement pour en voir l'avancée.
 
 https://user-images.githubusercontent.com/88431570/235492096-1d6b52e1-57b2-4849-838d-985537ecdae4.mp4
 
 
-Voilà ci dessous l'avancement du projet apres l'équivalent d'un jour de travail.
+Voilà ci-dessous l'avancement du projet après l'équivalent d'un jour de travail.
 
 ![movie_011_AdobeExpress](https://user-images.githubusercontent.com/88431570/235699747-91cad8a4-9f2a-4c75-afa2-3ca7fb64cb1b.gif)
 
