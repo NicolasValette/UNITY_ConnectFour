@@ -33,5 +33,10 @@ Voici quelque vidéo capturée au cours du développement pour en voir l'avancé
 
 https://user-images.githubusercontent.com/88431570/235492096-1d6b52e1-57b2-4849-838d-985537ecdae4.mp4
 
+
+Voilà ci dessous l'avancement du projet apres l'équivalent d'un jour de travail.
+
+![movie_011_AdobeExpress](https://user-images.githubusercontent.com/88431570/235699747-91cad8a4-9f2a-4c75-afa2-3ca7fb64cb1b.gif)
+
 ## Instruction d'installation.
 Telecharger l'archive et la décompresser. Ensuite, lancer ConnectFour.exe.
