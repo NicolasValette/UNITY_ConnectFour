@@ -26,11 +26,13 @@ namespace ConnectFour.Data
         [SerializeField]
         private float _yPosHighestRow;
         [Space]
-        [Header ("The pawns of both players")]
+        [Header ("The pawns")]
         [SerializeField]
         private GameObject _player1PawnPrefab;
         [SerializeField]
         private GameObject _player2PawnPrefab;
+        [SerializeField]
+        private GameObject _coinTossPrefab;
         [SerializeField]
         private List<float> _rowsPos;
         [SerializeField]
@@ -44,6 +46,7 @@ namespace ConnectFour.Data
         public float YPosHighestRow { get => _yPosHighestRow;}
         public GameObject Player1PawnPrefab { get => _player1PawnPrefab;}
         public GameObject Player2PawnPrefab { get => _player2PawnPrefab; }
+        public GameObject CoinTossPrefab { get => _coinTossPrefab; }
         public List<float> RowsPos { get => _rowsPos; }
         public List<float> ColumnsPos { get => _columnsPos; }
         #endregion

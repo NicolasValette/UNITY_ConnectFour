@@ -36,5 +36,14 @@ namespace ConnectFour.UI
             }
             _winText.enabled = true;
         }
+
+        public void QuitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
     }
 }

@@ -36,7 +36,23 @@ namespace ConnectFour.AI
                 _grid.PutPawn(ChoosePawnToPlay()); 
             }
         }
+        public void PlayAITurn()
+        {
+            if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
+            {
+                //List<int> availableCell = new List<int>();
+                //for (int i = 0; i < _grid.Data.Columns; i++)
+                //{
+                //    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
+                //    {
+                //        availableCell.Add(i);
+                //    }
+                //}
+                //_grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
 
+                _grid.PutPawn(ChoosePawnToPlay());
+            }
+        }
         private int ChoosePawnToPlay()
         {
             List<int> availableCell = new List<int>();
