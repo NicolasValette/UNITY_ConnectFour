@@ -19,11 +19,6 @@ namespace ConnectFour.Hovering
             _light.enabled = false;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
         private void OnMouseOver()
         {
             if (!_light.enabled)

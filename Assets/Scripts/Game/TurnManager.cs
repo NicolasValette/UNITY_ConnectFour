@@ -41,11 +41,13 @@ namespace ConnectFour.Game
         private bool _isPlayer1Turn = true;                                 // Player 1 is alway Red, and start the game
         private bool _isWin = false;
         private bool _isPaused = false;
+        private bool _activePlayerCanPlay;
         private GameObject _coin;                                            // Coin used for coin flip
         public bool IsWin { get => _isWin; }
         public bool IsPaused { get => _isPaused; }
         public bool IsPlayer1Turn { get => _isPlayer1Turn; }
         public PawnOwner PlayerChoice{ get => _playerChoice;}
+        public bool ActivePlayerCanPlay { get => _activePlayerCanPlay; }
         public PawnOwner ActivePlayer                                       // Return the player who is playing
         {
             get
@@ -122,10 +124,14 @@ namespace ConnectFour.Game
             StartGame?.Invoke();
         }
     
-       
+       public void PlayerPlay()
+        {
+            _activePlayerCanPlay = false;
+        }
         public void LaunchGame()
         {
             _isPlayer1Turn = true;
+            _activePlayerCanPlay = true;
             _ai.gameObject.SetActive(true);
             if (_players[0] == _playerChoice)
             {
@@ -139,6 +145,7 @@ namespace ConnectFour.Game
         public void SwitchTurn()
         {
             _isPlayer1Turn = !_isPlayer1Turn;
+            _activePlayerCanPlay = true;
             if (ActivePlayer == _playerChoice)
             {
                 _PawnButtonHandler.EnableButtons();

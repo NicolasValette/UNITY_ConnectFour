@@ -1,5 +1,6 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
+using ConnectFour.Inputs;
 using ConnectFour.UI;
 using System;
 using System.Collections;
@@ -18,6 +19,8 @@ namespace ConnectFour
 
         private bool _isMouseOver;
         private bool _isGameWin = false;
+        private bool _isMouseActive = true;
+
 
         // Components we need later
         private Renderer _renderer;
@@ -30,10 +33,25 @@ namespace ConnectFour
         private void OnEnable()
         {
             BoardGame.Grid.GameEnd += GameIsOver;
+            PlayerInput.OnMouseOn += ReceiveMouseEvent;
+            PlayerInput.OnMouseOff += HideMouseEvent;
         }
         private void OnDisable()
         {
             BoardGame.Grid.GameEnd-= GameIsOver;
+            PlayerInput.OnMouseOn -= ReceiveMouseEvent;
+            PlayerInput.OnMouseOff -= HideMouseEvent;
+        }
+
+        public void ReceiveMouseEvent()
+        {
+            _isMouseActive = true;
+            Exit();
+        }
+        public void HideMouseEvent()
+        {
+            _isMouseActive = false;
+            Exit();
         }
         public void GameIsOver(PawnOwner winner)
         {
@@ -67,7 +85,10 @@ namespace ConnectFour
         }
         private void OnMouseOver()
         {
-            Over();
+            if (_isMouseActive)
+            {
+                Over();
+            }
         }
         public void Activate()
         {

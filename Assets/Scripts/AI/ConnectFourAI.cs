@@ -18,30 +18,17 @@ namespace ConnectFour.AI
             gameObject.SetActive(false);                                            // Disable IA before the game start
         }
 
-        // Update is called once per frame
-        void Update()
+        public void PlayInsteadOfPlayer()
         {
-            //if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
-            //{
-               
-
-            //    _grid.PutPawn(ChoosePawnToPlay()); 
-            //}
+            if (!_turnManager.IsWin)
+            {
+                _grid.PutPawn(ChoosePawnToPlay());
+            }
         }
         public void PlayAITurn()
         {
             if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
             {
-                //List<int> availableCell = new List<int>();
-                //for (int i = 0; i < _grid.Data.Columns; i++)
-                //{
-                //    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
-                //    {
-                //        availableCell.Add(i);
-                //    }
-                //}
-                //_grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
-
                 _grid.PutPawn(ChoosePawnToPlay());
             }
         }

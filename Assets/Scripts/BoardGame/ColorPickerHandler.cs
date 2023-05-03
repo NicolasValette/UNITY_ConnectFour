@@ -13,16 +13,13 @@ public class ColorPickerHandler : MonoBehaviour
     private SelectionHover _hoverPawnYellow;
     [SerializeField]
     private TurnManager _turnManager;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+ 
     private void OnEnable()
     {
         _hoverPawnRed.OnSelected += Choose;
         _hoverPawnYellow.OnSelected += Choose;
     }
+
     private void OnDisable()
     {
         _hoverPawnRed.OnSelected -= Choose;

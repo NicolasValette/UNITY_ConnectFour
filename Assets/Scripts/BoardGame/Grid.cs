@@ -57,7 +57,7 @@ namespace ConnectFour.BoardGame
         {
             if (choice == PawnOwner.PlayerRed)
             {
-                Instantiate(_gridData.Player1PawnPrefab, _redPawnPos.position, Quaternion.Euler(90f,0f,0f));
+                Instantiate(_gridData.Player1PawnPrefab, _redPawnPos.position, Quaternion.Euler(90f, 0f, 0f));
             }
             else
             {
@@ -98,7 +98,40 @@ namespace ConnectFour.BoardGame
             }
             return -1;
         }
-
+        public int CheckDirectedAlignment(Vector2 lastPawn, Vector2 dir, PawnOwner player)
+        {
+            int alignNumber = 1;
+            for (int i = 1; i < _gridData.NumberForWin; i++)
+            {
+                Vector2 tempVector = (lastPawn + (dir * i));
+                Vector2 tempOppositeVector = (lastPawn - (dir * i));
+                if ((tempVector.x >= 0 && tempVector.y >= 0) &&
+                    (tempVector.x < _gridData.Rows && tempVector.y < _gridData.Columns) &&
+                    (_grid[(int)tempVector.x, (int)tempVector.y] == player))
+                {
+                    alignNumber++;
+                }
+                if ((tempOppositeVector.x >= 0 && tempOppositeVector.y >= 0) &&
+                    (tempOppositeVector.x < _gridData.Rows && tempOppositeVector.y < _gridData.Columns) &&
+                    (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
+                {
+                    alignNumber++;
+                }
+            }
+            return alignNumber;
+        }
+        public bool isGameWin2(int lastPawnRow, int lastPawnColumn, PawnOwner player)
+        {
+            Vector2 lastPawnPos = new Vector2(lastPawnRow, lastPawnColumn);
+            
+            if ((CheckDirectedAlignment(lastPawnPos, new Vector2(0, 1), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 0), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 1), player) >= _gridData.NumberForWin))
+            {
+                return true;
+            }
+            return false;
+        }
         public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
         {
             int line = 1; //Number of pan in line.
@@ -221,10 +254,10 @@ namespace ConnectFour.BoardGame
         }
         public void PutPawn(int column)
         {
-            if (IsColumnAvailable(column))
+            if (IsColumnAvailable(column) && _turnManager.ActivePlayerCanPlay)
             {
+                _turnManager.PlayerPlay();
                 int row = AddPawn(column, _turnManager.ActivePlayer);
-                //  Debug.Log("row = " + row);
                 Vector2 pos = GetPositionFromGrid(row, column);
                 GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.PlayerRed ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
                     new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
@@ -235,7 +268,8 @@ namespace ConnectFour.BoardGame
         }
         public void EndOfTurnCheck(int lastRowPlayed, int lastColumnPlayed)
         {
-            
+            Debug.Log("IGW : " + IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer) +
+                " // IGW 2 " + isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer));
             if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
                 GameEnd?.Invoke(_turnManager.ActivePlayer);
@@ -245,7 +279,7 @@ namespace ConnectFour.BoardGame
                 SwitchTurn?.Invoke();
             }
 
-            
+
             int _numberOfColumFull = 0;
             for (int j = 0; j < _gridData.Columns; j++)
             {

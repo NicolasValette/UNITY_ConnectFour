@@ -18,7 +18,7 @@ namespace ConnectFour.BoardGame
         private Grid _grid;
 
         private int _actualKeyboardColumn = 0;
-        // Start is called before the first frame update
+      
         void Awake()
         {
             _grid = GetComponentInParent<Grid>();
@@ -61,6 +61,12 @@ namespace ConnectFour.BoardGame
                     _buttonPositions[i].gameObject.SetActive(false);
                 }
             }
+            // We the actual column is full, we go to the right
+            if (!_grid.IsColumnAvailable(_actualKeyboardColumn))
+            {
+                RightColumn();
+            }
+
         }
         public void DisableButtons()
         {
@@ -77,7 +83,10 @@ namespace ConnectFour.BoardGame
         }
         public void SwitchColumn(int nextColumn)
         {
-            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Exit();
+            for (int i=0; i<_grid.Data.Columns;i++)
+            {
+                _buttonPositions[i].GetComponentInChildren<Hover>()?.Exit();
+            }
             _actualKeyboardColumn = nextColumn;
             _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Over(); ;
         }

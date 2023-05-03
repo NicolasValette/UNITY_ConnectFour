@@ -18,13 +18,7 @@ namespace ConnectFour.Data
         private int _numberForWin = 4;
 
         [Space]
-        [Header ("Position of the rows")]
-        [Tooltip("Y position of the lowest row in the grid")]
-        [SerializeField]
-        private float _yPosLowestRow;
-        [Tooltip("Y position of the highest row in the grid")]
-        [SerializeField]
-        private float _yPosHighestRow;
+        [Header ("Entry Position of the rows")]
         [SerializeField]
         private float _yPosEntryPoint;
         [Space]
@@ -48,8 +42,7 @@ namespace ConnectFour.Data
         public int Columns { get => _columns; }
         public int Rows { get => _rows; }
         public int NumberForWin { get => _numberForWin; }
-        public float YPosLowestRow { get => _yPosLowestRow;}
-        public float YPosHighestRow { get => _yPosHighestRow;}
+
         public float YPosEntryPoint { get => _yPosEntryPoint; }
         public GameObject Player1PawnPrefab { get => _player1PawnPrefab;}
         public GameObject Player2PawnPrefab { get => _player2PawnPrefab; }
