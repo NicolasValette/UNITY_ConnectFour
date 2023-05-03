@@ -1,5 +1,7 @@
 using ConnectFour.AI;
 using ConnectFour.BoardGame;
+using ConnectFour.Camera;
+using ConnectFour.UI;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -24,19 +26,24 @@ namespace ConnectFour.Game
         private PawnButtonHandler _PawnButtonHandler;
         [SerializeField]
         private Transform _coinSpawnPosition;
+        [SerializeField]
+        private CameraController _cameraController;
 
 
         #region EVENTS
         public static event Action<PawnOwner> OnColorChoose;                // Raised when the player choose a color;
         public static event Action StartGame;
+        public static event Action<PawnOwner> OnBeginnerChoose;
         #endregion
         private PlayerType[] _playersType;
         private PawnOwner[] _players;
         private PawnOwner _playerChoice;
         private bool _isPlayer1Turn = true;                                 // Player 1 is alway Red, and start the game
         private bool _isWin = false;
+        private bool _isPaused = false;
         private GameObject _coin;                                            // Coin used for coin flip
         public bool IsWin { get => _isWin; }
+        public bool IsPaused { get => _isPaused; }
         public bool IsPlayer1Turn { get => _isPlayer1Turn; }
         public PawnOwner PlayerChoice{ get => _playerChoice;}
         public PawnOwner ActivePlayer                                       // Return the player who is playing
@@ -53,6 +60,7 @@ namespace ConnectFour.Game
                 return _isPlayer1Turn ? _players[1] : _players[0];
             }
         }
+        public PawnOwner StratingPlayer { get => _players[0]; }
         // Start is called before the first frame update
         void Start()
         {
@@ -61,8 +69,8 @@ namespace ConnectFour.Game
             _playersType[1] = PlayerType.AI;
 
             _players = new PawnOwner[2];                                // We init the players tab
-            _players[0] = PawnOwner.Player1;
-            _players[1] = PawnOwner.Player2;                        
+            _players[0] = PawnOwner.PlayerRed;
+            _players[1] = PawnOwner.PlayerYellow;                        
             _coin = Instantiate(_grid.Data.CoinTossPrefab, _coinSpawnPosition.position, Quaternion.identity);
 
         }
@@ -86,8 +94,16 @@ namespace ConnectFour.Game
         public void PlayerChooseRed(bool redIsChosen)
         {
             _playersType[redIsChosen ? 0 : 1] = PlayerType.Human;
-           _playerChoice = redIsChosen ? PawnOwner.Player1 : PawnOwner.Player2;
-            OnColorChoose?.Invoke(redIsChosen ? PawnOwner.Player1 : PawnOwner.Player2);
+           _playerChoice = redIsChosen ? PawnOwner.PlayerRed : PawnOwner.PlayerYellow;
+            OnColorChoose?.Invoke(redIsChosen ? PawnOwner.PlayerRed : PawnOwner.PlayerYellow); //event a enlevé
+            StartCoroutine(CoinFlip());
+        }
+        public void PlayerChoose(PawnOwner playerChoice)
+        {
+            _playerChoice = playerChoice;
+            _cameraController.MoveCameraToPosition();
+          //  _grid.DisplayPlayerChoice(playerChoice);
+            OnColorChoose?.Invoke(playerChoice);
             StartCoroutine(CoinFlip());
         }
 
@@ -99,13 +115,14 @@ namespace ConnectFour.Game
             Debug.Log("Color choose = " + _playerChoice.ToString());
             _PawnButtonHandler.InitButton(PlayerChoice);
             yield return new WaitForSeconds(2);
-
-            _players[0] = startingPlayer == 0 ? PawnOwner.Player1 : PawnOwner.Player2;
-            _players[1] = startingPlayer == 0 ? PawnOwner.Player2 : PawnOwner.Player1;
+            OnBeginnerChoose?.Invoke(startingPlayer == 0 ? PawnOwner.PlayerRed : PawnOwner.PlayerYellow);
+            _players[0] = startingPlayer == 0 ? PawnOwner.PlayerRed : PawnOwner.PlayerYellow;
+            _players[1] = startingPlayer == 0 ? PawnOwner.PlayerYellow : PawnOwner.PlayerRed;
 
             StartGame?.Invoke();
         }
     
+       
         public void LaunchGame()
         {
             _isPlayer1Turn = true;

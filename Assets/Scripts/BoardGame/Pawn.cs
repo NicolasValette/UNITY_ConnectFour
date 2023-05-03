@@ -8,8 +8,8 @@ namespace ConnectFour.BoardGame
     public  enum PawnOwner
     {
         None,
-        Player1,
-        Player2
+        PlayerRed,
+        PlayerYellow
     }
     // Class to describe pawn behaviour
     public class Pawn : MonoBehaviour

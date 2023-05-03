@@ -18,6 +18,11 @@ namespace ConnectFour.BoardGame
         [SerializeField]
         private TurnManager _turnManager;
 
+        [SerializeField]
+        private Transform _redPawnPos;
+        [SerializeField]
+        private Transform _yellowPawnPos;
+
 
         #region EVENTS
         public static event Action SwitchTurn;          // Raised each turn to switch
@@ -41,15 +46,23 @@ namespace ConnectFour.BoardGame
         private void OnEnable()
         {
             Hover.OnHover += PutPawn;
+            TurnManager.OnColorChoose += DisplayPlayerChoice;
         }
         private void OnDisable()
         {
             Hover.OnHover -= PutPawn;
+            TurnManager.OnColorChoose -= DisplayPlayerChoice;
         }
-        // Update is called once per frame
-        void Update()
+        public void DisplayPlayerChoice(PawnOwner choice)
         {
-
+            if (choice == PawnOwner.PlayerRed)
+            {
+                Instantiate(_gridData.Player1PawnPrefab, _redPawnPos.position, Quaternion.Euler(90f,0f,0f));
+            }
+            else
+            {
+                Instantiate(_gridData.Player2PawnPrefab, _yellowPawnPos.position, Quaternion.Euler(90f, 0f, 0f));
+            }
         }
         private Vector2 GetPositionFromGrid(int rows, int columns)
         {
@@ -213,7 +226,7 @@ namespace ConnectFour.BoardGame
                 int row = AddPawn(column, _turnManager.ActivePlayer);
                 //  Debug.Log("row = " + row);
                 Vector2 pos = GetPositionFromGrid(row, column);
-                GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.Player1 ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
+                GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.PlayerRed ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
                     new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
                 Pawn.transform.SetParent(transform, true);
                 Pawn.GetComponent<Pawn>()?.Fall(pos.y, row, column, EndOfTurnCheck);

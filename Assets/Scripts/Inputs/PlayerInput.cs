@@ -1,4 +1,6 @@
 using ConnectFour.BoardGame;
+using ConnectFour.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +12,10 @@ namespace ConnectFour.Inputs
     {
         [SerializeField]
         private PawnButtonHandler _pawnButtonHandler;
+        [SerializeField]
+        private UIHandler _uiHandler;
+        private bool _isGamePaused = false;
+
         // Update is called once per frame
         void Update()
         {
@@ -27,14 +33,7 @@ namespace ConnectFour.Inputs
                 _pawnButtonHandler.ActivateColumn();
             }
 
-            if (key.escapeKey.wasPressedThisFrame)
-            {
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-            }
+           
         }
     }
 }

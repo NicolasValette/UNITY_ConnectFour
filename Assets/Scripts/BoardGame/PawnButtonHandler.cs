@@ -34,7 +34,7 @@ namespace ConnectFour.BoardGame
         public void InitButton(PawnOwner playerChoice)
         {
             GameObject prefabToInstantiate;
-            if (playerChoice == PawnOwner.Player1)
+            if (playerChoice == PawnOwner.PlayerRed)
             {
                 prefabToInstantiate = _redButtonPrefab;
             }

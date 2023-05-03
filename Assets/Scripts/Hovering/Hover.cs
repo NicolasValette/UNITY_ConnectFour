@@ -1,5 +1,6 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
+using ConnectFour.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace ConnectFour
             _isGameWin= true;
             gameObject.SetActive(false);
         }
+    
         public void Exit()
         {
             if (!_isGameWin)
