@@ -28,11 +28,11 @@ namespace ConnectFour
         }
         private void OnEnable()
         {
-            Grid.GameEnd += GameIsOver;
+            BoardGame.Grid.GameEnd += GameIsOver;
         }
         private void OnDisable()
         {
-            Grid.GameEnd-= GameIsOver;
+            BoardGame.Grid.GameEnd-= GameIsOver;
         }
         public void GameIsOver(PawnOwner winner)
         {
@@ -64,6 +64,10 @@ namespace ConnectFour
         }
         private void OnMouseUpAsButton()
         {
+            if (_renderer != null)
+            {
+                _renderer.enabled = false;
+            }
             OnHover?.Invoke(_column);
         }
 

@@ -14,12 +14,20 @@ namespace ConnectFour.BoardGame
         [SerializeField]
         private GameObject _yellowButtonPrefab;
 
+        private Grid _grid;
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-
+            _grid = GetComponentInParent<Grid>();
         }
-
+        private void OnEnable()
+        {
+            Hover.OnHover += DisableButtons;
+        }
+        private void OnDisable()
+        {
+            Hover.OnHover -= DisableButtons;
+        }
         public void InitButton(PawnOwner playerChoice)
         {
             GameObject prefabToInstantiate;
@@ -37,6 +45,28 @@ namespace ConnectFour.BoardGame
                 button.GetComponent<Hover>()?.InitColumn(i);
                 button.transform.SetParent(_buttonPositions[i]);
             }
+        }
+
+        public void EnableButtons()
+        {
+            gameObject.SetActive(true);
+            for (int i=0; i<_grid.Data.Columns; i++)
+            {
+                // We check every colomn, and disable them if it's full
+                if (!_grid.IsColumnAvailable(i))
+                {
+                    _buttonPositions[i].gameObject.SetActive(false);
+                }
+            }
+        }
+        public void DisableButtons()
+        {
+            gameObject.SetActive(false);
+        }
+        // method who listen OnHoverEvent
+        public void DisableButtons(int column)
+        {
+            DisableButtons();
         }
         // Update is called once per frame
         void Update()

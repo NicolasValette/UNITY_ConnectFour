@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace ConnectFour.BoardGame
         private int _columnNumber;
         private int _rowNumber;
         private bool _isFalling = false;
-        private float _targetYPosition;
+        //private float _targetYPosition;
         private float _fallingTime = 1f;
 
         // Start is called before the first frame update
@@ -30,7 +31,7 @@ namespace ConnectFour.BoardGame
         {
 
         }
-        public IEnumerator Move (float startYPos, float targetYpos, float timeDuration)
+        public IEnumerator Move (float startYPos, float targetYpos, float timeDuration, int lastRowPlayed, int lastColPlayed, Action<int, int> callbackAfterFalling)
         {
             float timeElapsed = 0f;
             while (timeElapsed < timeDuration)
@@ -39,12 +40,12 @@ namespace ConnectFour.BoardGame
                 timeElapsed += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
+            callbackAfterFalling(lastRowPlayed, lastColPlayed);
         }
-        public void Fall(float y)
+        public void Fall(float targetPos, int lastRowPlayed, int lastColPlayed, Action<int, int> callbackAfterFalling)
         {
-            _targetYPosition = y;
-            Debug.Log("Move from " + transform.position.y + " to " + _targetYPosition);
-            StartCoroutine(Move(transform.position.y, _targetYPosition, (_fallingTime != 0) ? _fallingTime : 1f));
+            Debug.Log("Move from " + transform.position.y + " to " + targetPos);
+            StartCoroutine(Move(transform.position.y, targetPos, ((_fallingTime != 0) ? _fallingTime : 1f), lastRowPlayed, lastColPlayed, callbackAfterFalling));
         }
         // Set this pawn in the grid at the correct column and the row where the pawn must fall
         public void PutPawnOnGrid(int row, int column)

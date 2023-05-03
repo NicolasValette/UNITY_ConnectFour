@@ -1,10 +1,7 @@
 using ConnectFour.AI;
 using ConnectFour.BoardGame;
-using JetBrains.Annotations;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ConnectFour.Game
@@ -20,7 +17,7 @@ namespace ConnectFour.Game
         [SerializeField]
         private GameObject _pawnButtons;
         [SerializeField]
-        private Grid _grid;
+        private BoardGame.Grid _grid;
         [SerializeField]
         private ConnectFourAI _ai;
         [SerializeField]
@@ -71,14 +68,14 @@ namespace ConnectFour.Game
         }
         private void OnEnable()
         {
-            Grid.SwitchTurn += SwitchTurn;
-            Grid.GameEnd += GameWin;
+            BoardGame.Grid.SwitchTurn += SwitchTurn;
+            BoardGame.Grid.GameEnd += GameWin;
             StartGame += LaunchGame;
         }
         private void OnDisable()
         {
-            Grid.SwitchTurn -= SwitchTurn;
-            Grid.GameEnd -= GameWin;
+            BoardGame.Grid.SwitchTurn -= SwitchTurn;
+            BoardGame.Grid.GameEnd -= GameWin;
             StartGame -= LaunchGame;
         }
         // Update is called once per frame
@@ -115,7 +112,7 @@ namespace ConnectFour.Game
             _ai.gameObject.SetActive(true);
             if (_players[0] == _playerChoice)
             {
-                _pawnButtons.SetActive(true);
+                _PawnButtonHandler.EnableButtons();
             }
             else
             {
@@ -127,11 +124,13 @@ namespace ConnectFour.Game
             _isPlayer1Turn = !_isPlayer1Turn;
             if (ActivePlayer == _playerChoice)
             {
-                _pawnButtons.SetActive(true);
+                _PawnButtonHandler.EnableButtons();
+                //_pawnButtons.SetActive(true);
             }
             else
             {
                 _pawnButtons.SetActive(false);
+                _ai.PlayAITurn();
             }
         }
         public void GameWin(PawnOwner player)

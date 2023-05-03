@@ -26,6 +26,11 @@ public class LevelLoader : MonoBehaviour
         Debug.Log("LoadLevel");
         StartCoroutine(LoadLevel("ConnectFour"));
     }
+    public void ReLoadLevel()
+    {
+        Debug.Log("ReLoadLevel : " + SceneManager.GetActiveScene().name);
+        StartCoroutine(LoadLevel(SceneManager.GetActiveScene().name));
+    }
 
     public IEnumerator LoadLevel(string sceneName)
     {
@@ -35,4 +40,5 @@ public class LevelLoader : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
     }
+ 
 }

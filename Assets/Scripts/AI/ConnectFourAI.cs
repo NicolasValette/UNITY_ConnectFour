@@ -11,7 +11,7 @@ namespace ConnectFour.AI
         [SerializeField]
         private TurnManager _turnManager;
         [SerializeField]
-        private Grid _grid;
+        private BoardGame.Grid _grid;
         // Start is called before the first frame update
         void Start()
         {
@@ -21,20 +21,12 @@ namespace ConnectFour.AI
         // Update is called once per frame
         void Update()
         {
-            if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
-            {
-                //List<int> availableCell = new List<int>();
-                //for (int i = 0; i < _grid.Data.Columns; i++)
-                //{
-                //    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
-                //    {
-                //        availableCell.Add(i);
-                //    }
-                //}
-                //_grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
+            //if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
+            //{
+               
 
-                _grid.PutPawn(ChoosePawnToPlay()); 
-            }
+            //    _grid.PutPawn(ChoosePawnToPlay()); 
+            //}
         }
         public void PlayAITurn()
         {

@@ -1,7 +1,5 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -13,20 +11,24 @@ namespace ConnectFour.UI
         [SerializeField]
         private TMP_Text _winText;
         [SerializeField]
+        private GameObject _endGameUIElements;
+        [SerializeField]
+        private BoardGame.Grid _grid;
+        [SerializeField]
         private GameObject _chooseButtons;
         // Start is called before the first frame update
         void Start()
         {
-            _winText.enabled = false;
+            _endGameUIElements.SetActive(false);
         }
         private void OnEnable()
         {
-            Grid.GameEnd += DisplayWinner;
+            BoardGame.Grid.GameEnd += DisplayWinner;
             TurnManager.OnColorChoose += ToggleChooseButton;
         }
         private void OnDisable()
         {
-            Grid.GameEnd -= DisplayWinner;
+            BoardGame.Grid.GameEnd -= DisplayWinner;
             TurnManager.OnColorChoose -= ToggleChooseButton;
         }
         public void DisplayWinner (PawnOwner player)
@@ -34,12 +36,13 @@ namespace ConnectFour.UI
             if (player == PawnOwner.None)
             {
                 _winText.text = "DRAW !";
+                 
             }
             else
             {
                 _winText.text = player.ToString() + " WINS !!";
             }
-            _winText.enabled = true;
+            _endGameUIElements.SetActive(true);
         }
 
         public void ToggleChooseButton(PawnOwner playerChoice)

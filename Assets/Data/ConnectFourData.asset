@@ -22,8 +22,8 @@ MonoBehaviour:
     type: 3}
   _player2PawnPrefab: {fileID: 8937874891452882026, guid: accd76522d4e98b4598eb3e34f41cc6b,
     type: 3}
-  _defaultRedMat: {fileID: 0}
-  _defaultYellowMat: {fileID: 0}
+  _defaultRedMat: {fileID: 2100000, guid: de31659dcb4435c4b87d9deffcc57906, type: 2}
+  _defaultYellowMat: {fileID: 2100000, guid: 809cc6cfb1066cc41ae24a9132ce65f8, type: 2}
   _coinTossPrefab: {fileID: 9216712815784529988, guid: 5a6ffeb0938b2b847abc9633f1c15a3b,
     type: 3}
   _rowsPos:
