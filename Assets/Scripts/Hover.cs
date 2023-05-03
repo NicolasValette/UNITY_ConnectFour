@@ -39,36 +39,45 @@ namespace ConnectFour
             _isGameWin= true;
             gameObject.SetActive(false);
         }
-        private void OnMouseExit()
+        public void Exit()
         {
-            if (!_isGameWin && _isMouseOver)
+            if (!_isGameWin)
             {
-                _isMouseOver = false;
-                if (_renderer != null)
+                if (_renderer != null && _renderer.enabled == true)
                 {
                     _renderer.enabled = false;
                 }
             }
         }
-        private void OnMouseOver()
+        private void OnMouseExit()
         {
-            if (!_isGameWin && !_isMouseOver)
+            Exit();
+        }
+        public void Over()
+        {
+            if (!_isGameWin)
             {
-                _isMouseOver = true;
-                if (_renderer != null)
+                if (_renderer != null && _renderer.enabled == false)
                 {
                     _renderer.enabled = true;
                 }
             }
-
         }
-        private void OnMouseUpAsButton()
+        private void OnMouseOver()
+        {
+            Over();
+        }
+        public void Activate()
         {
             if (_renderer != null)
             {
                 _renderer.enabled = false;
             }
             OnHover?.Invoke(_column);
+        }
+        private void OnMouseUpAsButton()
+        {
+          Activate();
         }
 
         public void InitColumn (int column)

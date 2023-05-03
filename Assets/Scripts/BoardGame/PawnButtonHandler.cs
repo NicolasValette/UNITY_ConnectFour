@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ConnectFour.BoardGame
@@ -15,6 +16,8 @@ namespace ConnectFour.BoardGame
         private GameObject _yellowButtonPrefab;
 
         private Grid _grid;
+
+        private int _actualKeyboardColumn = 0;
         // Start is called before the first frame update
         void Awake()
         {
@@ -68,10 +71,45 @@ namespace ConnectFour.BoardGame
         {
             DisableButtons();
         }
-        // Update is called once per frame
-        void Update()
+        public void ActivateColumn()
         {
-
+            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Activate();
+        }
+        public void SwitchColumn(int nextColumn)
+        {
+            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Exit();
+            _actualKeyboardColumn = nextColumn;
+            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Over(); ;
+        }
+        public void RightColumn()
+        {
+            int nextColumn = 1;
+            // we check each next column until we found an available column
+            while (nextColumn <= _grid.Data.Columns && !_grid.IsColumnAvailable((_actualKeyboardColumn + nextColumn)% _grid.Data.Columns))
+            {
+                nextColumn++;
+            }
+            SwitchColumn((_actualKeyboardColumn + nextColumn) % _grid.Data.Columns);           
+        }
+        public void LeftColumn()
+        {
+            int nextColumn = _actualKeyboardColumn -1;
+            int j = 0;      // number of checked column
+            if (nextColumn <= -1)
+            {
+                nextColumn = _grid.Data.Columns -1;
+            }
+            // we check each next column until we found an available column
+            while (j <= _grid.Data.Columns && !_grid.IsColumnAvailable(nextColumn))
+            {
+                nextColumn--;
+                if (nextColumn <= -1)
+                {
+                    nextColumn = _grid.Data.Columns - 1;
+                }
+                j++;
+            }
+            SwitchColumn(nextColumn);
         }
     }
-}
+} 

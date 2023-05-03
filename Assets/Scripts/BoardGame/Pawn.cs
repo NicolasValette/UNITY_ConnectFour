@@ -19,11 +19,12 @@ namespace ConnectFour.BoardGame
         private bool _isFalling = false;
         //private float _targetYPosition;
         private float _fallingTime = 1f;
+        private AudioSource _audioSource;
 
         // Start is called before the first frame update
         void Start()
         {
-            
+            _audioSource = GetComponent<AudioSource>();
         }
 
         // Update is called once per frame
@@ -33,6 +34,9 @@ namespace ConnectFour.BoardGame
         }
         public IEnumerator Move (float startYPos, float targetYpos, float timeDuration, int lastRowPlayed, int lastColPlayed, Action<int, int> callbackAfterFalling)
         {
+            AudioSource audiosource = GetComponent<AudioSource>();
+            audiosource.Play();
+
             float timeElapsed = 0f;
             while (timeElapsed < timeDuration)
             {
@@ -40,6 +44,8 @@ namespace ConnectFour.BoardGame
                 timeElapsed += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
+
+            audiosource.Stop();
             callbackAfterFalling(lastRowPlayed, lastColPlayed);
         }
         public void Fall(float targetPos, int lastRowPlayed, int lastColPlayed, Action<int, int> callbackAfterFalling)
