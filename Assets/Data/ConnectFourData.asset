@@ -15,8 +15,6 @@ MonoBehaviour:
   _columns: 7
   _rows: 6
   _numberForWin: 4
-  _yPosLowestRow: 0.2
-  _yPosHighestRow: 0.9
   _yPosEntryPoint: 1.1
   _player1PawnPrefab: {fileID: 8884411155047406970, guid: 65ca46625f8b05e448c845b8677506a4,
     type: 3}
@@ -27,7 +25,7 @@ MonoBehaviour:
   _coinTossPrefab: {fileID: 9216712815784529988, guid: 5a6ffeb0938b2b847abc9633f1c15a3b,
     type: 3}
   _rowsPos:
-  - 0.2
+  - 0.207
   - 0.345
   - 0.485
   - 0.62

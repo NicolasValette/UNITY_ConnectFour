@@ -31,6 +31,7 @@ namespace ConnectFour.BoardGame
 
 
         private PawnOwner[,] _grid;
+        private Pawn _actualPawn;                       // we keep the last instantiate pawn to play particle effect
 
         #endregion
         #region Getters
@@ -70,7 +71,8 @@ namespace ConnectFour.BoardGame
             //float deltaY = (_gridData.YPosHighestRow - _gridData.YPosLowestRow) / _gridData.Rows;
             //Vector2 pos = new Vector2((-0.5f) + (deltaX * columns), (_gridData.YPosLowestRow + (deltaY * rows)));
 
-            Vector2 pos = new Vector2(_gridData.ColumnsPos[columns], _gridData.RowsPos[rows]);
+            Vector2 pos = new Vector2(_gridData.ColumnsPos[columns], _gridData.RowsPos[rows]);      // We switch pos to sync with Unity coord
+           // Vector2 pos = new Vector2(_gridData.RowsPos[columns], _gridData.ColumnsPos[rows]);
 
             return pos;
 
@@ -98,7 +100,19 @@ namespace ConnectFour.BoardGame
             }
             return -1;
         }
-        public int CheckDirectedAlignment(Vector2 lastPawn, Vector2 dir, PawnOwner player)
+        private bool IsCoordInGrid (Vector2 position)
+        {
+            if (position.x >= _gridData.Rows || position.y >= _gridData.Columns)
+            {
+                return false;
+            }
+            if (position.x < 0 ||  position.y < 0)
+            {
+                return false;
+            }
+            return (_grid[(int)position.x, (int)position.y] != PawnOwner.None);
+        }
+        private int CheckDirectedAlignment(Vector2 lastPawn, Vector2 dir, PawnOwner player)
         {
             int alignNumber = 1;
             bool positiveDirectioEnded = false;
@@ -107,20 +121,23 @@ namespace ConnectFour.BoardGame
             {
                 Vector2 tempVector = (lastPawn + (dir * i));
                 Vector2 tempOppositeVector = (lastPawn - (dir * i));
-                if (!positiveDirectioEnded && (tempVector.x >= 0 && tempVector.y >= 0) &&
-                    (tempVector.x < _gridData.Rows && tempVector.y < _gridData.Columns) &&
-                    (_grid[(int)tempVector.x, (int)tempVector.y] == player))
+                //if (!positiveDirectioEnded && (tempVector.x >= 0 && tempVector.y >= 0) &&
+                //    (tempVector.x < _gridData.Rows && tempVector.y < _gridData.Columns) &&
+                //    (_grid[(int)tempVector.x, (int)tempVector.y] == player))
+                if (!positiveDirectioEnded && IsCoordInGrid(tempVector) && (_grid[(int)tempVector.x, (int)tempVector.y] == player))
                 {
-                    alignNumber++;
+
+                        alignNumber++;
                 }
                 else
                 {
                     // we reach the end of a line, with the end of grid or with an opponent pawn
                    positiveDirectioEnded = true;
                 }
-                if (!oppositeDirectionEnded && (tempOppositeVector.x >= 0 && tempOppositeVector.y >= 0) &&
-                    (tempOppositeVector.x < _gridData.Rows && tempOppositeVector.y < _gridData.Columns) &&
-                    (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
+                //if (!oppositeDirectionEnded && (tempOppositeVector.x >= 0 && tempOppositeVector.y >= 0) &&
+                //    (tempOppositeVector.x < _gridData.Rows && tempOppositeVector.y < _gridData.Columns) &&
+                //    (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
+                if(!oppositeDirectionEnded && IsCoordInGrid(tempOppositeVector) && (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
                 {
                     alignNumber++;
                 }
@@ -279,7 +296,12 @@ namespace ConnectFour.BoardGame
                 GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.PlayerRed ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
                     new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
                 Pawn.transform.SetParent(transform, true);
-                Pawn.GetComponent<Pawn>()?.Fall(pos.y, row, column, EndOfTurnCheck);
+                _actualPawn = Pawn.GetComponent<Pawn>();
+                if (_actualPawn!= null)
+                {
+                    _actualPawn.Fall(pos.y, row, column, EndOfTurnCheck);
+                }
+                
 
             }
         }
@@ -295,6 +317,7 @@ namespace ConnectFour.BoardGame
            
             if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
+                _actualPawn.PlayWinEffect();
                 GameEnd?.Invoke(_turnManager.ActivePlayer);
             }
             else
