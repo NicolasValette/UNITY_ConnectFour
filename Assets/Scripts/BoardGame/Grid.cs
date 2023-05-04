@@ -19,9 +19,13 @@ namespace ConnectFour.BoardGame
         private TurnManager _turnManager;
 
         [SerializeField]
-        private Transform _redPawnPos;
+        private Transform _PlayerPawnPos;
         [SerializeField]
-        private Transform _yellowPawnPos;
+        private Transform _OpponentPawnPos;
+        [SerializeField]
+        private GameObject _redStack;
+        [SerializeField]
+        private GameObject _yellowStack;
 
 
         #region EVENTS
@@ -58,11 +62,13 @@ namespace ConnectFour.BoardGame
         {
             if (choice == PawnOwner.PlayerRed)
             {
-                Instantiate(_gridData.Player1PawnPrefab, _redPawnPos.position, Quaternion.Euler(90f, 0f, 0f));
+                _redStack.transform.position = _PlayerPawnPos.position;
+                _yellowStack.transform.position = _OpponentPawnPos.position;
             }
             else
             {
-                Instantiate(_gridData.Player2PawnPrefab, _yellowPawnPos.position, Quaternion.Euler(90f, 0f, 0f));
+                _redStack.transform.position = _OpponentPawnPos.position;
+                _yellowStack.transform.position = _PlayerPawnPos.position;
             }
         }
         private Vector2 GetPositionFromGrid(int rows, int columns)
