@@ -2,8 +2,6 @@ using ConnectFour.AI;
 using ConnectFour.BoardGame;
 using ConnectFour.UI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

@@ -1,10 +1,6 @@
 using ConnectFour.BoardGame;
-using ConnectFour.Game;
 using ConnectFour.Inputs;
-using ConnectFour.UI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ConnectFour

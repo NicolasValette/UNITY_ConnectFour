@@ -1,8 +1,6 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
 using ConnectFour.Hovering;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ColorPickerHandler : MonoBehaviour

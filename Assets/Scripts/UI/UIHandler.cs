@@ -1,6 +1,5 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;

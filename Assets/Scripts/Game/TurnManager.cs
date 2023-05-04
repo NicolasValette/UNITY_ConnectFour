@@ -1,7 +1,6 @@
 using ConnectFour.AI;
 using ConnectFour.BoardGame;
 using ConnectFour.Camera;
-using ConnectFour.UI;
 using System;
 using System.Collections;
 using UnityEngine;

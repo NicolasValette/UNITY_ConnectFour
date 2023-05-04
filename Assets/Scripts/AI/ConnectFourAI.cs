@@ -1,6 +1,5 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
