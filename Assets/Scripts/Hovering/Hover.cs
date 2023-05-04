@@ -24,14 +24,14 @@ namespace ConnectFour
         {
             _renderer = GetComponent<Renderer>();
             _isGameWin = false;
-        }
-        private void OnEnable()
-        {
+
+
             BoardGame.Grid.GameEnd += GameIsOver;
             PlayerInput.OnMouseOn += ReceiveMouseEvent;
             PlayerInput.OnMouseOff += HideMouseEvent;
         }
-        private void OnDisable()
+
+        private void OnDestroy()
         {
             BoardGame.Grid.GameEnd-= GameIsOver;
             PlayerInput.OnMouseOn -= ReceiveMouseEvent;

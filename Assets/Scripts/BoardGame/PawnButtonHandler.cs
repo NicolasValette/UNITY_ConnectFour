@@ -26,6 +26,9 @@ namespace ConnectFour.BoardGame
         void Awake()
         {
             _grid = GetComponentInParent<Grid>();
+            gameObject.SetActive(false);
+
+            Hover.OnHover += DisableButtons;
         }
         private void Start()
         {
@@ -44,11 +47,7 @@ namespace ConnectFour.BoardGame
                 
             }
         }
-        private void OnEnable()
-        {
-            Hover.OnHover += DisableButtons;
-        }
-        private void OnDisable()
+        private void OnDestroy()
         {
             Hover.OnHover -= DisableButtons;
         }

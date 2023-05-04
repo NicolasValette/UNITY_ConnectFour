@@ -21,6 +21,9 @@ namespace ConnectFour.BoardGame
         private GameObject _redStack;
         [SerializeField]
         private GameObject _yellowStack;
+        [Header("Debug")]
+        [SerializeField]
+        private bool _isDebug = true;
 
 
         #region EVENTS
@@ -42,7 +45,6 @@ namespace ConnectFour.BoardGame
         {
             _grid = new PawnOwner[_gridData.Rows, _gridData.Columns];
         }
-
         private void OnEnable()
         {
             Hover.OnHover += PutPawn;
@@ -192,9 +194,11 @@ namespace ConnectFour.BoardGame
         {
             if (IsColumnAvailable(column) && _turnManager.ActivePlayerCanPlay)
             {
+                Debug.Log("Play pawn in column " + column + " by " + _turnManager.ActivePlayer);
                 _turnManager.PlayerPlay();
                 int row = AddPawn(column, _turnManager.ActivePlayer);
                 Vector2 pos = GetPositionFromGrid(row, column);
+                Debug.Log("Instatiate pawn for " + _turnManager.ActivePlayer);
                 GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.PlayerRed ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
                     new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
                 Pawn.transform.SetParent(transform, true);
@@ -204,37 +208,74 @@ namespace ConnectFour.BoardGame
                 {
                     _actualPawn.Fall(pos.y, row, column, EndOfTurnCheck);
                 }
-
-
             }
+        }
+        private bool IsGameDraw()
+        {
+            for (int i = 0; i<_gridData.Columns;i++)
+            {
+                if (IsColumnAvailable(i))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public void EndOfTurnCheck(int lastRowPlayed, int lastColumnPlayed)
         {
+            if (_isDebug)
+            {
+                GridToString();
+            }
+            Debug.Log("Draw : " + IsGameDraw());
             if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
                 _actualPawn.PlayWinEffect();
                 GameEnd?.Invoke(_turnManager.ActivePlayer);
+            }
+            else if (IsGameDraw())
+            {
+                GameEnd?.Invoke(PawnOwner.None);                    // Raised if the game is a draw
             }
             else
             {
                 SwitchTurn?.Invoke();
             }
 
+            //Draw Check
+            //int _numberOfColumFull = 0;
+            //for (int j = 0; j < _gridData.Columns; j++)
+            //{
+            //    if (_grid[_gridData.Rows - 1, j] != PawnOwner.None)
+            //    {
+            //        _numberOfColumFull++;                           // We track the number of pawn in the highest row
+            //    }                                                   // if the highest line is full, the grid is full and the game is a draw
+            //}
+            //if (_numberOfColumFull >= _gridData.Columns)
+            //{
+            //    GameEnd?.Invoke(PawnOwner.None);                    // Raised if the game is a draw
+            //}
+            
+           
 
-            int _numberOfColumFull = 0;
-            for (int j = 0; j < _gridData.Columns; j++)
+
+        }
+        private void GridToString()
+        {
+            string str = "Grid :";
+            for (int i = _gridData.Rows - 1; i >= 0; i--)
             {
-                if (_grid[_gridData.Rows - 1, j] != PawnOwner.None)
+                str += "\n[";
+                for (int j = 0; j < _gridData.Columns; j++)
                 {
-                    _numberOfColumFull++;                           // We track the number of pawn in the highest row
-                }                                                   // if the highest line is full, the grid is full and the game is a draw
-            }
-            if (_numberOfColumFull >= _gridData.Columns)
-            {
-                GameEnd?.Invoke(PawnOwner.None);                    // Raised if the game is a draw
-            }
+                    str += _grid[i, j] + " - ";
+                }
 
-
+                str += "]";
+                
+            }
+            str += "\n End of grid";
+            Debug.Log(str);
         }
     }
 }

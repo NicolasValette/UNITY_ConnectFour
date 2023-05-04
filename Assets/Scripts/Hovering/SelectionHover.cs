@@ -11,10 +11,12 @@ namespace ConnectFour.Hovering
         [SerializeField]
         private Light _light;
         public event Action<PawnOwner> OnSelected;
+        private Collider _collider;
         // Start is called before the first frame update
         void Start()
         {
             _light.enabled = false;
+            _collider = GetComponent<Collider>();
         }
 
         private void OnMouseOver()
@@ -34,6 +36,10 @@ namespace ConnectFour.Hovering
         private void OnMouseUpAsButton()
         {
             OnSelected?.Invoke(_player);
+            if (_collider != null)
+            {
+                _collider.enabled = false;
+            }
         }
     }
 }

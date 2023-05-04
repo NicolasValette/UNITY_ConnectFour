@@ -173,6 +173,7 @@ namespace ConnectFour.Game
         {
             _isPlayer1Turn = !_isPlayer1Turn;
             _activePlayerCanPlay = true;
+            Debug.Log("Turn switching, now active = " + ActivePlayer + " and passive = " + PassivePlayer);
             if (ActivePlayer == _playerChoice && !_isAIInsteadOfHuman)
             {
                 _PawnButtonHandler.EnableButtons();
