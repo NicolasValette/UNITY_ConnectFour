@@ -25,7 +25,10 @@ public class ColorPickerHandler : MonoBehaviour
     }
     public void Choose(PawnOwner playerChoice)
     {
+        Debug.Log("1");
         _turnManager.PlayerChoose(playerChoice);
+        _hoverPawnRed.gameObject.SetActive(false);
+        _hoverPawnYellow.gameObject.SetActive(false);
         gameObject.SetActive(true);
     }
 }
