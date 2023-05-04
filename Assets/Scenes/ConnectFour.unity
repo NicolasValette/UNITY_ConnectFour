@@ -2642,7 +2642,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -105.1001, y: -50}
+  m_AnchoredPosition: {x: -100, y: -128.6}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &977539903
@@ -5093,26 +5093,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 361721188}
     m_Modifications:
-    - target: {fileID: 2973706642668602194, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706642668602195, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706642668602207, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706642668602207, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 454.8
-      objectReference: {fileID: 0}
     - target: {fileID: 2973706643210265970, guid: 249e49a0dedd867449d351dbcb8524fd,
         type: 3}
       propertyPath: m_RootOrder
@@ -5172,31 +5152,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelLoader
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706643833651657, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706643833651657, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706643833651662, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706643833651662, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2973706643833651662, guid: 249e49a0dedd867449d351dbcb8524fd,
-        type: 3}
-      propertyPath: m_BlocksRaycasts
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 249e49a0dedd867449d351dbcb8524fd, type: 3}
