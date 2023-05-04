@@ -1,58 +1,53 @@
 using ConnectFour.BoardGame;
 using ConnectFour.Game;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ConnectFour.AI
 {
-    public class ConnectFourAI: MonoBehaviour
+    public class ConnectFourAI : MonoBehaviour
     {
         [SerializeField]
         private TurnManager _turnManager;
         [SerializeField]
-        private Grid _grid;
+        private BoardGame.Grid _grid;
         // Start is called before the first frame update
         void Start()
         {
-
+            gameObject.SetActive(false);                                            // Disable IA before the game start
         }
 
-        // Update is called once per frame
-        void Update()
+        /// <summary>
+        /// Debug method to allow AI to play in place of the player
+        /// </summary>
+        public void PlayInsteadOfPlayer()
         {
-            if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
+            if (!_turnManager.IsWin)
             {
-                //List<int> availableCell = new List<int>();
-                //for (int i = 0; i < _grid.Data.Columns; i++)
-                //{
-                //    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
-                //    {
-                //        availableCell.Add(i);
-                //    }
-                //}
-                //_grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
-
-                _grid.PutPawn(ChoosePawnToPlay()); 
-            }
-        }
-        public void PlayAITurn()
-        {
-            if (!_turnManager.IsPlayer1Turn && !_turnManager.IsWin)
-            {
-                //List<int> availableCell = new List<int>();
-                //for (int i = 0; i < _grid.Data.Columns; i++)
-                //{
-                //    if (_grid.PlayingGrid[_grid.Data.Rows-1, i] == PawnOwner.None)  //We check if the columns is not full, 
-                //    {
-                //        availableCell.Add(i);
-                //    }
-                //}
-                //_grid.PutPawn(availableCell[Random.Range(0, availableCell.Count)]); //then we pick one cell in the avalaible cells
-
                 _grid.PutPawn(ChoosePawnToPlay());
             }
         }
+
+        /// <summary>
+        /// Method call to let AI play his turn
+        /// </summary>
+        public void PlayAITurn()
+        {
+           
+            if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
+            {
+                _grid.PutPawn(ChoosePawnToPlay());
+            }
+            else if (_turnManager.IsAInsteadOfPlayer)
+            {
+                PlayInsteadOfPlayer();
+            }
+        }
+
+        /// <summary>
+        /// The main method of the AI of the game, check every colomn to verify if either AI or player can win, and play to win or block
+        /// </summary>
+        /// <returns>The number of column where to play</returns>
         private int ChoosePawnToPlay()
         {
             List<int> availableCell = new List<int>();
@@ -78,7 +73,7 @@ namespace ConnectFour.AI
                 }
             }
             // If we can't win, we try to deny other player victory, otherwise, we play a random column 
-            return (opponentWinningCol != -1) ? opponentWinningCol : availableCell[Random.Range(0, availableCell.Count)];                               
+            return (opponentWinningCol != -1) ? opponentWinningCol : availableCell[Random.Range(0, availableCell.Count)];
         }
     }
 }

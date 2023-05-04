@@ -1,237 +1,240 @@
-using ConnectFour;
-using ConnectFour.BoardGame;
 using ConnectFour.Data;
 using ConnectFour.Game;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+namespace ConnectFour.BoardGame
 {
-    [SerializeField]
-    private GridData _gridData;
-    [SerializeField]
-    private TurnManager _turnManager;
+    public class Grid : MonoBehaviour
+    {
+        [Tooltip("Data of the grid")]
+        [SerializeField]
+        private GridData _gridData;
+        [SerializeField]
+        private TurnManager _turnManager;
+        [Header("Stack of pawn")]
+        [SerializeField]
+        private Transform _PlayerPawnPos;
+        [SerializeField]
+        private Transform _OpponentPawnPos;
+        [SerializeField]
+        private GameObject _redStack;
+        [SerializeField]
+        private GameObject _yellowStack;
 
-   
-    #region EVENTS
-    public static event Action SwitchTurn;          // Raised each turn to switch
-    public static event Action<PawnOwner> GameEnd;  // Raised when a player win the game
-    public static event Action GameDraw;            // Raised when the grid is full without winner
-        
-    private PawnOwner[,] _grid;
-    
-    #endregion
-    #region Getters
-    public GridData Data { get => _gridData; }
-    public PawnOwner[,] PlayingGrid { get => _grid; }
-    #endregion
-    // Start is called before the first frame update
-    void Start()
-    {
-        _grid = new PawnOwner[_gridData.Rows,_gridData.Columns]; 
-    }
 
-    private void OnEnable()
-    {
-        Hover.OnHover += PutPawn;
-    }
-    private void OnDisable()
-    {
-        Hover.OnHover -= PutPawn;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private Vector2 GetPositionFromGrid(int rows, int columns)
-    {
-        //float deltaX = 1f / _gridData.Columns ;
-        //float deltaY = (_gridData.YPosHighestRow - _gridData.YPosLowestRow) / _gridData.Rows;
-        //Vector2 pos = new Vector2((-0.5f) + (deltaX * columns), (_gridData.YPosLowestRow + (deltaY * rows)));
+        #region EVENTS
+        public static event Action SwitchTurn;          // Raised each turn to switch
+        public static event Action<PawnOwner> GameEnd;  // Raised when a player win the game
+        public static event Action GameDraw;            // Raised when the grid is full without winner
 
-        Vector2 pos = new Vector2( _gridData.ColumnsPos[columns], _gridData.RowsPos[rows]); 
-    
-        return pos;
-        
-    }
-    public void ResetGrid()
-    {
-        for (int i = 0; i < _gridData.Rows; i++)
+
+        private PawnOwner[,] _grid;
+        private Pawn _actualPawn;                       // we keep the last instantiate pawn to play particle effect
+
+        #endregion
+        #region Getters
+        public GridData Data { get => _gridData; }
+        public PawnOwner[,] PlayingGrid { get => _grid; }
+        #endregion
+        // Start is called before the first frame update
+        void Start()
         {
-            for (int j = 0; j< _gridData.Columns; j++)
-            {
-                _grid[i,j] = PawnOwner.None;
-            }
+            _grid = new PawnOwner[_gridData.Rows, _gridData.Columns];
         }
-    }
-    // Put a pawn in a collumns, return the rows where the pawn fall, -1 if the columns is full
-    public int AddPawn (int columns, PawnOwner player)
-    {
-        for (int i = 0; i < _gridData.Rows; i++)
+
+        private void OnEnable()
         {
-            if (_grid[i, columns] == PawnOwner.None)
-            {
-                _grid[i, columns] = player;
-                return i;
-            }
+            Hover.OnHover += PutPawn;
+            TurnManager.OnColorChoose += DisplayPlayerChoice;
         }
-        return -1;
-    }
-
-    public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
-    {
-        int line = 1; //Number of pan in line.
-
-        // first, check horizontal aligment
-        //step 1 : left side
-        for (int i = lastPawnColumn - 1; i >= 0; i--)
+        private void OnDisable()
         {
-            if (_grid[lastPawnRow, i] == player)    // Check if the neihgour box contain player pawn
+            Hover.OnHover -= PutPawn;
+            TurnManager.OnColorChoose -= DisplayPlayerChoice;
+        }
+        public void DisplayPlayerChoice(PawnOwner choice)
+        {
+            if (choice == PawnOwner.PlayerRed)
             {
-                line++;
+                _redStack.transform.position = _PlayerPawnPos.position;
+                _yellowStack.transform.position = _OpponentPawnPos.position;
             }
             else
             {
-                break;                              // If the box contains opponent pawn, we are going to check other side
+                _redStack.transform.position = _OpponentPawnPos.position;
+                _yellowStack.transform.position = _PlayerPawnPos.position;
             }
         }
-        //step 2 : right side
-        for (int i = lastPawnColumn + 1; i < _gridData.Columns; i++)
+        private Vector2 GetPositionFromGrid(int rows, int columns)
         {
-            if (_grid[lastPawnRow, i] == player)    // Check if the neihgour box contain player pawn
+      
+            Vector2 pos = new Vector2(_gridData.ColumnsPos[columns], _gridData.RowsPos[rows]);      // We switch pos to sync with Unity coord
+            return pos;
+
+        }
+        public void ResetGrid()
+        {
+            for (int i = 0; i < _gridData.Rows; i++)
             {
-                line++;
-            }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
+                for (int j = 0; j < _gridData.Columns; j++)
+                {
+                    _grid[i, j] = PawnOwner.None;
+                }
             }
         }
-        if (line >= _gridData.NumberForWin)
+        // Put a pawn in a collumns, return the rows where the pawn fall, -1 if the columns is full
+        public int AddPawn(int columns, PawnOwner player)
         {
-            return true;
+            for (int i = 0; i < _gridData.Rows; i++)
+            {
+                if (_grid[i, columns] == PawnOwner.None)
+                {
+                    _grid[i, columns] = player;
+                    return i;
+                }
+            }
+            return -1;
+        }
+        /// <summary>
+        /// Check is this coord is in the grid.
+        /// </summary>
+        /// <param name="position">Position to check.</param>
+        /// <returns>Returns true if present, else return false</returns>
+        private bool IsCoordInGrid(Vector2 position)
+        {
+            if (position.x >= _gridData.Rows || position.y >= _gridData.Columns)
+            {
+                return false;
+            }
+            if (position.x < 0 || position.y < 0)
+            {
+                return false;
+            }
+            return (_grid[(int)position.x, (int)position.y] != PawnOwner.None);
         }
 
-        // Check Diagonal
-        line = 1;                                   // We reset the number of pawn, we check other direction
-        // Check North West Side
-        for (int i=1; (lastPawnColumn - i >= 0 && lastPawnRow + i < _gridData.Rows); i++)
+        /// <summary>
+        /// Check the number of pawn aligned in the given direction.
+        /// </summary>
+        /// <param name="lastPawn">position of the last pawn played, starting point of theverification</param>
+        /// <param name="dir">simple Vecor of the direction to check.</param>
+        /// <param name="player">The player to check.</param>
+        /// <returns>Number of aligned pawn in this direction</returns>
+        private int CheckDirectedAlignment(Vector2 lastPawn, Vector2 dir, PawnOwner player)
         {
-            if (_grid[lastPawnRow + i, lastPawnColumn - i] == player)    // Check if the neihgour box contain player pawn
+            int alignNumber = 1;
+            bool positiveDirectioEnded = false;
+            bool oppositeDirectionEnded = false;
+            for (int i = 1; i < _gridData.NumberForWin; i++)
             {
-                line++;
+                Vector2 tempVector = (lastPawn + (dir * i));
+                Vector2 tempOppositeVector = (lastPawn - (dir * i));
+                if (!positiveDirectioEnded && IsCoordInGrid(tempVector) && (_grid[(int)tempVector.x, (int)tempVector.y] == player))
+                {
+                    alignNumber++;
+                }
+                else
+                {
+                    // we reach the end of a line, with the end of grid or with an opponent pawn
+                    positiveDirectioEnded = true;
+                }
+                if (!oppositeDirectionEnded && IsCoordInGrid(tempOppositeVector) && (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
+                {
+                    alignNumber++;
+                }
+                else
+                {
+                    // we reach the end of a line, with the end of grid or with an opponent pawn
+                    oppositeDirectionEnded = true;
+                }
+
+                if (positiveDirectioEnded && oppositeDirectionEnded)
+                {
+                    return alignNumber;
+                }
             }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
-            }
-        }
-        // Check South East Side
-        for (int i = 1; (lastPawnColumn + i < _gridData.Columns && lastPawnRow - i >=0); i++)
-        {
-            if (_grid[lastPawnRow - i, lastPawnColumn + i] == player)    // Check if the neihgour box contain player pawn
-            {
-                line++;
-            }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
-            }
-        }
-        if (line >= _gridData.NumberForWin)
-        {
-            return true;
+            return alignNumber;
         }
 
-        // Check other Diagonal
-        line = 1;                                   // We reset the number of pawn, we check other direction
-        // Check North East Side
-        for (int i = 1; (lastPawnColumn + i < _gridData.Columns && lastPawnRow + i < _gridData.Rows); i++)
+        /// <summary>
+        /// Check if the game is win with the last pawn played
+        /// </summary>
+        /// <param name="lastPawnRow">Row of the last played pawn.</param>
+        /// <param name="lastPawnColumn">Column of the last played pawn.</param>
+        /// <param name="player">The player who played the pawn.</param>
+        /// <returns>True if is win.</returns>
+        public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
         {
-            if (_grid[lastPawnRow + i, lastPawnColumn + i] == player)    // Check if the neihgour box contain player pawn
+            Vector2 lastPawnPos = new Vector2(lastPawnRow, lastPawnColumn);
+
+            if ((CheckDirectedAlignment(lastPawnPos, new Vector2(0, 1), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 0), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 1), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, -1), player) >= _gridData.NumberForWin))
             {
-                line++;
+                return true;
             }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
-            }
-        }
-        // Check South West Side
-        for (int i = 1; (lastPawnColumn - i >= 0 && lastPawnRow - i >= 0); i++)
-        {
-            if (_grid[lastPawnRow - i, lastPawnColumn - i] == player)    // Check if the neihgour box contain player pawn
-            {
-                line++;
-            }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
-            }
-        }
-        if (line >= _gridData.NumberForWin)
-        {
-            return true;
+            return false;
         }
 
-        // Check Vertical
-        line = 1;                                   // we reset the number on pawn lined up
-        for (int i = 1; lastPawnRow - i >= 0; i++)
+        /// <summary>
+        /// Check if the given column is full.
+        /// </summary>
+        /// <param name="column">The column to check.</param>
+        /// <returns>true if is available, else false</returns>
+        public bool IsColumnAvailable(int column)
         {
-            if (_grid[lastPawnRow - i, lastPawnColumn] == player)    // Check if the neihgour box contain player pawn
+            return _grid[_gridData.Rows - 1, column] == PawnOwner.None;
+        }
+
+        public void PutPawn(int column)
+        {
+            if (IsColumnAvailable(column) && _turnManager.ActivePlayerCanPlay)
             {
-                line++;
-            }
-            else
-            {
-                break;                              // If the box contains opponent pawn, we are going to check other side
+                _turnManager.PlayerPlay();
+                int row = AddPawn(column, _turnManager.ActivePlayer);
+                Vector2 pos = GetPositionFromGrid(row, column);
+                GameObject Pawn = Instantiate(_turnManager.ActivePlayer == PawnOwner.PlayerRed ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
+                    new Vector3(pos.x, _gridData.YPosEntryPoint, 0f), Quaternion.identity);
+                Pawn.transform.SetParent(transform, true);
+                
+                _actualPawn = Pawn.GetComponent<Pawn>();
+                if (_actualPawn != null)
+                {
+                    _actualPawn.Fall(pos.y, row, column, EndOfTurnCheck);
+                }
+
+
             }
         }
-        if (line >= _gridData.NumberForWin)
+        public void EndOfTurnCheck(int lastRowPlayed, int lastColumnPlayed)
         {
-            return true;
-        }
-        return false;
-    }
-
-    public bool IsColumnAvailable(int column)
-    {
-        return _grid[_gridData.Rows -1, column] == PawnOwner.None;
-    }
-    public void PutPawn(int column)
-    {
-        if (IsColumnAvailable(column))
-        {
-            int row = AddPawn(column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
-            //  Debug.Log("row = " + row);
-            Vector2 pos = GetPositionFromGrid(row, column);
-            GameObject Pawn = Instantiate(_turnManager.IsPlayer1Turn ? _gridData.Player1PawnPrefab : _gridData.Player2PawnPrefab,
-                new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
-            Pawn.transform.SetParent(transform, true);
-
-            if (IsGameWin(row, column, _turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2))
+            if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
-                GameEnd?.Invoke(_turnManager.IsPlayer1Turn ? PawnOwner.Player1 : PawnOwner.Player2);
+                _actualPawn.PlayWinEffect();
+                GameEnd?.Invoke(_turnManager.ActivePlayer);
             }
             else
             {
                 SwitchTurn?.Invoke();
             }
-        }
-        int _numberOfColumFull = 0;
-        for (int j=0; j< _gridData.Columns; j++) 
-        {
-            if (_grid[_gridData.Rows - 1, j] != PawnOwner.None)
+
+
+            int _numberOfColumFull = 0;
+            for (int j = 0; j < _gridData.Columns; j++)
             {
-                _numberOfColumFull++;                           // We track the number of pawn in the highest row
-            }                                                   // if the highest line is full, the grid is full and the game is a draw
-        }   
-        if (_numberOfColumFull >= _gridData.Columns)
-        {
-            GameEnd?.Invoke(PawnOwner.None);
+                if (_grid[_gridData.Rows - 1, j] != PawnOwner.None)
+                {
+                    _numberOfColumFull++;                           // We track the number of pawn in the highest row
+                }                                                   // if the highest line is full, the grid is full and the game is a draw
+            }
+            if (_numberOfColumFull >= _gridData.Columns)
+            {
+                GameEnd?.Invoke(PawnOwner.None);                    // Raised if the game is a draw
+            }
+
+
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,22 +8,16 @@ public class LevelLoader : MonoBehaviour
     private Animator _transition;
     [SerializeField]
     private float _transitionTime = 1f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField]
+    private string _mainSceneName = "ConnectFour";
 
     public void LoadNextLevel()
     {
-        Debug.Log("LoadLevel");
-        StartCoroutine(LoadLevel("ConnectFour"));
+        StartCoroutine(LoadLevel(_mainSceneName));
+    }
+    public void ReLoadLevel()
+    {
+        StartCoroutine(LoadLevel(SceneManager.GetActiveScene().name));
     }
 
     public IEnumerator LoadLevel(string sceneName)
@@ -35,4 +28,5 @@ public class LevelLoader : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
     }
+ 
 }
