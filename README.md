@@ -43,5 +43,7 @@ Voilà ci-dessous l'avancement du projet après l'équivalent d'un jour de trava
 
 ![InGame](https://user-images.githubusercontent.com/88431570/236323231-7572d624-5482-49b5-86b8-5550e34dc6ff.png)
 
+https://www.youtube.com/watch?v=t_Bq4asUYhE
+
 ## Instruction d'installation.
 Telecharger l'archive et la décompresser. Ensuite, lancer ConnectFour.exe.
