@@ -12,12 +12,11 @@ namespace ConnectFour
     public class Hover : MonoBehaviour
     {
         [SerializeField]
-        private int _column;
+        private int _column;                                // The column of the pawn
         #region EVENTS
-        public static event Action<int> OnHover;
+        public static event Action<int> OnHover;            // Raised when we click on hovering element.
         #endregion
 
-        private bool _isMouseOver;
         private bool _isGameWin = false;
         private bool _isMouseActive = true;
 

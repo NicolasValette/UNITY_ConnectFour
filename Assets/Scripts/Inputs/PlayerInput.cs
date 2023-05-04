@@ -9,6 +9,9 @@ using UnityEngine.InputSystem;
 
 namespace ConnectFour.Inputs
 {
+    /// <summary>
+    /// Class to hold the player input using the new Input System.
+    /// </summary>
     public class PlayerInput : MonoBehaviour
     {
         [SerializeField]
@@ -22,8 +25,10 @@ namespace ConnectFour.Inputs
         public static event Action OnMouseOff;
         public static event Action OnMouseOn;
         #endregion
-        private bool _isGamePaused = false;
 
+        /// <summary>
+        /// Method to hide mouse when we use the keyboard
+        /// </summary>
         public void HideMouse()
         {
             if (Cursor.visible == true)
@@ -45,6 +50,7 @@ namespace ConnectFour.Inputs
             }
             if (key.cKey.wasPressedThisFrame)
             {
+                // Cheat code to let AI play instead of player.
                 _ai.PlayInsteadOfPlayer();
             }
             if (key.rightArrowKey.wasPressedThisFrame)
@@ -59,7 +65,6 @@ namespace ConnectFour.Inputs
             }
             else if ((key.enterKey.wasPressedThisFrame || key.spaceKey.wasPressedThisFrame) && (mouse.delta.ReadValue() == Vector2.zero))
             {
-                Debug.Log("Activate");
                 _pawnButtonHandler.ActivateColumn();
             }
            

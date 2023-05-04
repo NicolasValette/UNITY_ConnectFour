@@ -9,15 +9,15 @@ public class LevelLoader : MonoBehaviour
     private Animator _transition;
     [SerializeField]
     private float _transitionTime = 1f;
+    [SerializeField]
+    private string _mainSceneName = "ConnectFour";
 
     public void LoadNextLevel()
     {
-        Debug.Log("LoadLevel");
-        StartCoroutine(LoadLevel("ConnectFour"));
+        StartCoroutine(LoadLevel(_mainSceneName));
     }
     public void ReLoadLevel()
     {
-        Debug.Log("ReLoadLevel : " + SceneManager.GetActiveScene().name);
         StartCoroutine(LoadLevel(SceneManager.GetActiveScene().name));
     }
 

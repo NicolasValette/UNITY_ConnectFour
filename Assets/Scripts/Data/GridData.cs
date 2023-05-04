@@ -14,29 +14,36 @@ namespace ConnectFour.Data
         [Tooltip("Number of rows of our grid")]
         [SerializeField]
         private int _rows = 6;
+        [Tooltip("Required pawn needed to win")]
         [SerializeField]
         private int _numberForWin = 4;
-
         [Space]
         [Header ("Entry Position of the rows")]
         [SerializeField]
         private float _yPosEntryPoint;
         [Space]
-        [Header ("The pawns")]
+        [Header("Cell coord")]
+        [Tooltip("List of coord of each rows")]
+        [SerializeField]
+        private List<float> _rowsPos;
+        [Tooltip("List of coord of each columns")]
+        [SerializeField]
+        private List<float> _columnsPos;
+        [Space]
+        [Header("Default Materials")]
+        [SerializeField]
+        private Material _defaultRedMat;
+        [SerializeField]
+        private Material _defaultYellowMat;
+        [Space]
+        [Header("Prefabs")]
         [SerializeField]
         private GameObject _player1PawnPrefab;
         [SerializeField]
         private GameObject _player2PawnPrefab;
         [SerializeField]
-        private Material _defaultRedMat;
-        [SerializeField]
-        private Material _defaultYellowMat;
-        [SerializeField]
         private GameObject _coinTossPrefab;
-        [SerializeField]
-        private List<float> _rowsPos;
-        [SerializeField]
-        private List<float> _columnsPos;
+        
 
         #region Getters
         public int Columns { get => _columns; }

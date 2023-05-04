@@ -5,23 +5,46 @@ using UnityEngine;
 
 namespace ConnectFour.BoardGame
 {
+    /// <summary>
+    /// Hold method of the button of the grid
+    /// </summary>
     public class PawnButtonHandler : MonoBehaviour
     {
-
+        [Tooltip("List of position of all of the buttons.")]
         [SerializeField]
         private List<Transform> _buttonPositions;
+        [Space]
+        [Header("Prefabs")]
         [SerializeField]
         private GameObject _redButtonPrefab;
         [SerializeField]
         private GameObject _yellowButtonPrefab;
 
         private Grid _grid;
-
         private int _actualKeyboardColumn = 0;
+
+        private List<Hover> _buttonPositionHoverComponentInChildren;
       
         void Awake()
         {
             _grid = GetComponentInParent<Grid>();
+        }
+        private void Start()
+        {
+            _buttonPositionHoverComponentInChildren = new List<Hover>();
+            for (int i = 0; i < _buttonPositions.Count; i++)
+            {
+                Hover component = _buttonPositions[i].GetComponentInChildren<Hover>();
+                if (component != null)
+                {
+                    _buttonPositionHoverComponentInChildren.Add(component);
+                }
+                else
+                {
+                    Debug.Log("Missing componen in PawnButtonHandler, button number " + i);
+                }
+                
+            }
         }
         private void OnEnable()
         {
@@ -77,19 +100,25 @@ namespace ConnectFour.BoardGame
         {
             DisableButtons();
         }
+        /// <summary>
+        /// Activate a column to put a pawn on it.
+        /// </summary>
         public void ActivateColumn()
         {
-            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Activate();
+            _buttonPositionHoverComponentInChildren[_actualKeyboardColumn].Activate();
         }
         public void SwitchColumn(int nextColumn)
         {
             for (int i=0; i<_grid.Data.Columns;i++)
             {
-                _buttonPositions[i].GetComponentInChildren<Hover>()?.Exit();
+                _buttonPositionHoverComponentInChildren[i].Exit();
             }
             _actualKeyboardColumn = nextColumn;
-            _buttonPositions[_actualKeyboardColumn].GetComponentInChildren<Hover>()?.Over(); ;
+            _buttonPositionHoverComponentInChildren[_actualKeyboardColumn].Over(); ;
         }
+        /// <summary>
+        /// Move the selected column to the right.
+        /// </summary>
         public void RightColumn()
         {
             int nextColumn = 1;
@@ -100,6 +129,10 @@ namespace ConnectFour.BoardGame
             }
             SwitchColumn((_actualKeyboardColumn + nextColumn) % _grid.Data.Columns);           
         }
+
+        /// <summary>
+        /// Move the selected column to the left.
+        /// </summary>
         public void LeftColumn()
         {
             int nextColumn = _actualKeyboardColumn -1;

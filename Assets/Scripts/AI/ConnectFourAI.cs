@@ -18,6 +18,9 @@ namespace ConnectFour.AI
             gameObject.SetActive(false);                                            // Disable IA before the game start
         }
 
+        /// <summary>
+        /// Debug method to allow AI to play in place of the player
+        /// </summary>
         public void PlayInsteadOfPlayer()
         {
             if (!_turnManager.IsWin)
@@ -25,6 +28,10 @@ namespace ConnectFour.AI
                 _grid.PutPawn(ChoosePawnToPlay());
             }
         }
+
+        /// <summary>
+        /// Method call to let AI play his turn
+        /// </summary>
         public void PlayAITurn()
         {
            
@@ -37,6 +44,11 @@ namespace ConnectFour.AI
                 PlayInsteadOfPlayer();
             }
         }
+
+        /// <summary>
+        /// The main method of the AI of the game, check every colomn to verify if either AI or player can win, and play to win or block
+        /// </summary>
+        /// <returns>The number of column where to play</returns>
         private int ChoosePawnToPlay()
         {
             List<int> availableCell = new List<int>();
