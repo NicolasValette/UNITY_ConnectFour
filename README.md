@@ -4,6 +4,10 @@
 
 Ce projet est réalisé dans le cadre du test technique demandé par le studio Exkee.
 
+
+https://user-images.githubusercontent.com/88431570/236330672-6dd0dab9-e125-4225-bf8a-ae98f58dcb59.mp4
+
+
 La mission :
 Dans un monde en 3 dimensions, vous développerez un jeu de puissance 4 jouable face à une IA.
 
