@@ -28,6 +28,8 @@ namespace ConnectFour.Game
         private Transform _coinSpawnPosition;
         [SerializeField]
         private CameraController _cameraController;
+        [SerializeField]
+        private bool _isAIInsteadOfHuman = false;
 
 
         #region EVENTS
@@ -62,7 +64,9 @@ namespace ConnectFour.Game
                 return _isPlayer1Turn ? _players[1] : _players[0];
             }
         }
-        public PawnOwner StratingPlayer { get => _players[0]; }
+
+        public PawnOwner StartingPlayer { get => _players[0]; }
+        public bool IsAInsteadOfPlayer { get => _isAIInsteadOfHuman; }
         // Start is called before the first frame update
         void Start()
         {
@@ -133,7 +137,7 @@ namespace ConnectFour.Game
             _isPlayer1Turn = true;
             _activePlayerCanPlay = true;
             _ai.gameObject.SetActive(true);
-            if (_players[0] == _playerChoice)
+            if (_players[0] == _playerChoice && !_isAIInsteadOfHuman )
             {
                 _PawnButtonHandler.EnableButtons();
             }
@@ -146,7 +150,7 @@ namespace ConnectFour.Game
         {
             _isPlayer1Turn = !_isPlayer1Turn;
             _activePlayerCanPlay = true;
-            if (ActivePlayer == _playerChoice)
+            if (ActivePlayer == _playerChoice && !_isAIInsteadOfHuman)
             {
                 _PawnButtonHandler.EnableButtons();
                 //_pawnButtons.SetActive(true);

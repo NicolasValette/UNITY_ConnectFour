@@ -101,21 +101,37 @@ namespace ConnectFour.BoardGame
         public int CheckDirectedAlignment(Vector2 lastPawn, Vector2 dir, PawnOwner player)
         {
             int alignNumber = 1;
+            bool positiveDirectioEnded = false;
+            bool oppositeDirectionEnded = false;
             for (int i = 1; i < _gridData.NumberForWin; i++)
             {
                 Vector2 tempVector = (lastPawn + (dir * i));
                 Vector2 tempOppositeVector = (lastPawn - (dir * i));
-                if ((tempVector.x >= 0 && tempVector.y >= 0) &&
+                if (!positiveDirectioEnded && (tempVector.x >= 0 && tempVector.y >= 0) &&
                     (tempVector.x < _gridData.Rows && tempVector.y < _gridData.Columns) &&
                     (_grid[(int)tempVector.x, (int)tempVector.y] == player))
                 {
                     alignNumber++;
                 }
-                if ((tempOppositeVector.x >= 0 && tempOppositeVector.y >= 0) &&
+                else
+                {
+                    // we reach the end of a line, with the end of grid or with an opponent pawn
+                   positiveDirectioEnded = true;
+                }
+                if (!oppositeDirectionEnded && (tempOppositeVector.x >= 0 && tempOppositeVector.y >= 0) &&
                     (tempOppositeVector.x < _gridData.Rows && tempOppositeVector.y < _gridData.Columns) &&
                     (_grid[(int)tempOppositeVector.x, (int)tempOppositeVector.y] == player))
                 {
                     alignNumber++;
+                }
+                else
+                {
+                    oppositeDirectionEnded = true;
+                }
+
+                if (positiveDirectioEnded && oppositeDirectionEnded)
+                {
+                    return alignNumber;
                 }
             }
             return alignNumber;
@@ -126,7 +142,8 @@ namespace ConnectFour.BoardGame
             
             if ((CheckDirectedAlignment(lastPawnPos, new Vector2(0, 1), player) >= _gridData.NumberForWin) ||
                 (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 0), player) >= _gridData.NumberForWin) ||
-                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 1), player) >= _gridData.NumberForWin))
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, 1), player) >= _gridData.NumberForWin) ||
+                (CheckDirectedAlignment(lastPawnPos, new Vector2(1, -1), player) >= _gridData.NumberForWin))
             {
                 return true;
             }
@@ -268,8 +285,14 @@ namespace ConnectFour.BoardGame
         }
         public void EndOfTurnCheck(int lastRowPlayed, int lastColumnPlayed)
         {
-            Debug.Log("IGW : " + IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer) +
-                " // IGW 2 " + isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer));
+            bool igw = IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            bool igw2 = isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            if (igw != igw2)
+            {
+                Debug.Log( "IGW " + igw + " // IGW 2 "+ igw2 + " -- " + "Pos =  (" + lastRowPlayed + "; " + lastColumnPlayed);
+                isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            }
+           
             if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
                 GameEnd?.Invoke(_turnManager.ActivePlayer);

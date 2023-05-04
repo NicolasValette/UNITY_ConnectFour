@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ConnectFour.AI
 {
-    public class ConnectFourAI: MonoBehaviour
+    public class ConnectFourAI : MonoBehaviour
     {
         [SerializeField]
         private TurnManager _turnManager;
@@ -27,9 +27,14 @@ namespace ConnectFour.AI
         }
         public void PlayAITurn()
         {
+           
             if (_turnManager.ActivePlayer != _turnManager.PlayerChoice && !_turnManager.IsWin)
             {
                 _grid.PutPawn(ChoosePawnToPlay());
+            }
+            else if (_turnManager.IsAInsteadOfPlayer)
+            {
+                PlayInsteadOfPlayer();
             }
         }
         private int ChoosePawnToPlay()
@@ -57,7 +62,7 @@ namespace ConnectFour.AI
                 }
             }
             // If we can't win, we try to deny other player victory, otherwise, we play a random column 
-            return (opponentWinningCol != -1) ? opponentWinningCol : availableCell[Random.Range(0, availableCell.Count)];                               
+            return (opponentWinningCol != -1) ? opponentWinningCol : availableCell[Random.Range(0, availableCell.Count)];
         }
     }
 }
