@@ -43,7 +43,7 @@ namespace ConnectFour.Inputs
                 Cursor.visible = true;
                 OnMouseOn?.Invoke();
             }
-            if (key.iKey.wasPressedThisFrame)
+            if (key.cKey.wasPressedThisFrame)
             {
                 _ai.PlayInsteadOfPlayer();
             }

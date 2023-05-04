@@ -153,7 +153,7 @@ namespace ConnectFour.BoardGame
             }
             return alignNumber;
         }
-        public bool isGameWin2(int lastPawnRow, int lastPawnColumn, PawnOwner player)
+        public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
         {
             Vector2 lastPawnPos = new Vector2(lastPawnRow, lastPawnColumn);
             
@@ -166,7 +166,7 @@ namespace ConnectFour.BoardGame
             }
             return false;
         }
-        public bool IsGameWin(int lastPawnRow, int lastPawnColumn, PawnOwner player)
+        public bool IsGameWin_old(int lastPawnRow, int lastPawnColumn, PawnOwner player)
         {
             int line = 1; //Number of pan in line.
 
@@ -307,13 +307,13 @@ namespace ConnectFour.BoardGame
         }
         public void EndOfTurnCheck(int lastRowPlayed, int lastColumnPlayed)
         {
-            bool igw = IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
-            bool igw2 = isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
-            if (igw != igw2)
-            {
-                Debug.Log( "IGW " + igw + " // IGW 2 "+ igw2 + " -- " + "Pos =  (" + lastRowPlayed + "; " + lastColumnPlayed);
-                isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
-            }
+            //bool igw = IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            //bool igw2 = isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            //if (igw != igw2)
+            //{
+            //    Debug.Log( "IGW " + igw + " // IGW 2 "+ igw2 + " -- " + "Pos =  (" + lastRowPlayed + "; " + lastColumnPlayed);
+            //    isGameWin2(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer);
+            //}
            
             if (IsGameWin(lastRowPlayed, lastColumnPlayed, _turnManager.ActivePlayer))
             {
