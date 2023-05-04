@@ -26,6 +26,7 @@ Bonus :
 Le projet est réalisé avec Unity version 2021.3.19f1 en C#, en utilisant l'URP.
 Le projet utilise les packages suivnts :
 - New Input System.
+- Particle System.
 - Les vidéo de gameplay sont capturé avec le Unity Recorder.
 
 ## Video WIP.
@@ -37,6 +38,10 @@ https://user-images.githubusercontent.com/88431570/235492096-1d6b52e1-57b2-4849-
 Voilà ci-dessous l'avancement du projet après l'équivalent d'un jour de travail.
 
 ![movie_011_AdobeExpress](https://user-images.githubusercontent.com/88431570/235699747-91cad8a4-9f2a-4c75-afa2-3ca7fb64cb1b.gif)
+
+![MainMenu](https://user-images.githubusercontent.com/88431570/236323218-44f99753-d108-49b3-9efd-00bfcbf57f95.png)
+
+![InGame](https://user-images.githubusercontent.com/88431570/236323231-7572d624-5482-49b5-86b8-5550e34dc6ff.png)
 
 ## Instruction d'installation.
 Telecharger l'archive et la décompresser. Ensuite, lancer ConnectFour.exe.
