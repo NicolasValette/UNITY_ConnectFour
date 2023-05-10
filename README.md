@@ -51,3 +51,6 @@ https://www.youtube.com/watch?v=t_Bq4asUYhE
 
 ## Instruction d'installation.
 Telecharger l'archive et la décompresser. Ensuite, lancer ConnectFour.exe.
+
+Le jeu est également jouable en version HTML ici :
+https://myoji.itch.io/connect-four
